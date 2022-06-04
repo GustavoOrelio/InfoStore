@@ -1,3 +1,17 @@
 Link do swwager
 
 http://localhost:8080/swagger-ui/index.html
+
+
+Usuario
+Id
+Nome 
+CPF
+Login
+Senha
+
+Marca
+
+
+Grupo
+

@@ -5,6 +5,14 @@ import java.net.URISyntaxException;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import com.infostore.InfoStore.domain.Produto;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
@@ -38,11 +46,14 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    @GetMapping(value = "/produto", consumes =
-            MediaType.APPLICATION_JSON_VALUE, produces =
-            MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Busca produto", description = "Busca todos os produtos", tags = {"produto"})
+    @GetMapping(value = "/produto", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<Produto>> findAll(
-            @RequestBody(required=false) String nome, Pageable pageable){
+            @Parameter(description = "Insira o nome do produto", allowEmptyValue = true )
+            @RequestBody(required=false) String nome,
+            @Parameter(description = "Paginação", example = "{\"page\":0,\"size\":10}", allowEmptyValue = true)
+            Pageable pageable){
+        System.out.println(nome);
         if (StringUtils.isEmpty(nome)) {
             return ResponseEntity.ok(produtoService.findAll(pageable));
         }
@@ -51,6 +62,11 @@ public class ProdutoController {
         }
     }
 
+    @Operation(summary = "Busca ID", description = "Busca um produto por ID", tags = {"produto"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto encontrado"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado"),
+    })
     @GetMapping(value = "/produto/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Produto> findProdutoById(@PathVariable long id) {
@@ -64,6 +80,7 @@ public class ProdutoController {
         }
     }
 
+    @Operation(summary = "Cadastrar produto", description = "Cadastrar um produto", tags = {"produto"})
     @PostMapping(value = "/produto")
     public ResponseEntity<Produto> addProduto(@RequestBody Produto produto)
             throws URISyntaxException {
@@ -78,6 +95,8 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @Operation(summary = "Alterar produto ID", description = "Altera um produto inserindo o ID do mesmo", tags = {"produto"})
     @PutMapping(value = "/produto/{id}")
     public ResponseEntity<Produto> updateProduto(@Valid @RequestBody Produto produto, @PathVariable long id) {
         try {
@@ -92,6 +111,8 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @Operation(summary = "Deletar por ID", description = "Delete um produto pelo ID", tags = {"produto"})
     @DeleteMapping(path="/produto/{id}")
     public ResponseEntity<Void> deleteProdutoById(@PathVariable long id){
         try {

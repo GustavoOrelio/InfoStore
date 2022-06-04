@@ -33,8 +33,8 @@ public class ProdutoService {
     }
 
     public Page<Produto> findAllByNome(String nome, Pageable page) {
-        Page<Produto> produtos = produtoRepository.findByNome(nome, page);
-        return produtos;
+        Page<Produto> produto = produtoRepository.findByNome(nome, page);
+        return produto;
     }
 
     public Produto save(Produto produto) throws BadResourceException, ResourceAlreadyExistsException {
