@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 import javax.validation.Valid;
 
+import com.infostore.InfoStore.dto.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -45,17 +46,17 @@ public class UsuarioController {
 
     @Operation(summary = "Busca usuario", description = "Busca todos os usuarios", tags = {"usuario"})
     @GetMapping(value = "/usuario", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Usuario>> findAll(
+    public ResponseEntity<Page<UsuarioDTO>> findAll(
             @Parameter(description = "Insira o nome do usuario", allowEmptyValue = true )
             @RequestBody(required=false) String nome,
             @Parameter(description = "Paginação", example = "{\"page\":0,\"size\":10}", allowEmptyValue = true)
             Pageable pageable){
         System.out.println(nome);
         if (StringUtils.isEmpty(nome)) {
-            return ResponseEntity.ok(usuarioService.findAll(pageable));
+            return ResponseEntity.ok(new UsuarioDTO().converterListaUsuarioDTO(usuarioService.findAll(pageable)));
         }
         else {
-            return ResponseEntity.ok(usuarioService.findAllByNome(nome, pageable));
+            return ResponseEntity.ok(new UsuarioDTO().converterListaUsuarioDTO(usuarioService.findAllByNome(nome, pageable)));
         }
     }
 
@@ -79,11 +80,13 @@ public class UsuarioController {
 
     @Operation(summary = "Cadastrar usuario", description = "Cadastrar um usuario", tags = {"usuario"})
     @PostMapping(value = "/usuario")
-    public ResponseEntity<Usuario> addUsuario(@RequestBody Usuario usuario)
+    public ResponseEntity<UsuarioDTO> addUsuario(@RequestBody Usuario usuario)
             throws URISyntaxException {
         try {
             Usuario novoUsuario = usuarioService.save(usuario);
-            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getId())).body(usuario);
+
+            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getId()))
+                    .body(new UsuarioDTO().converter(usuario));
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
