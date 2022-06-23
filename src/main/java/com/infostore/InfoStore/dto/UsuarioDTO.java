@@ -12,7 +12,6 @@ public class UsuarioDTO {
     private String nome;
     private String cpf;
     private String email;
-    private Date dataCadastro;
 
     public UsuarioDTO converter(Usuario usuario){
         BeanUtils.copyProperties(usuario, this);

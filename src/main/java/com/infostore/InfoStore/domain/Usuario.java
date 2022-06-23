@@ -12,7 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
-import sun.security.util.Password;
+
 
 @Entity
 @Table(name = "usuario")
@@ -35,9 +35,6 @@ public class Usuario implements Serializable {
     private String cpf;
 
     private String email;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataCadastro;
 
     //Precisa realizar a criptografia
     private String senha;

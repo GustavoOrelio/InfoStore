@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UsuarioService {
@@ -39,6 +40,7 @@ public class UsuarioService {
 
     public Usuario save(Usuario usuario) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(usuario.getNome())) {
+            usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
             if (usuario.getId() != null && existsById(usuario.getId())) {
                 throw new ResourceAlreadyExistsException("Usuario com id: " + usuario.getId() + " já existe");
             }
