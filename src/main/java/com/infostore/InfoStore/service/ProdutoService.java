@@ -39,8 +39,8 @@ public class ProdutoService {
 
     public Produto save(Produto produto) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(produto.getNome())) {
-            if (produto.getId() != null && existsById(produto.getId())) {
-                throw new ResourceAlreadyExistsException("Produto com id: " + produto.getId() + " já existe");
+            if (produto.getIdProduto() != null && existsById(produto.getIdProduto())) {
+                throw new ResourceAlreadyExistsException("Produto com id: " + produto.getIdProduto() + " já existe");
             }
             return produtoRepository.save(produto);
         }
@@ -53,8 +53,8 @@ public class ProdutoService {
 
     public void update(Produto produto) throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(produto.getNome())){
-            if (!existsById(produto.getId())){
-                throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getId());
+            if (!existsById(produto.getIdProduto())){
+                throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getIdProduto());
             }
             produtoRepository.save(produto);
         }

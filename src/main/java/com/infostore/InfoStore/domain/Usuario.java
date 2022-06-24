@@ -1,7 +1,6 @@
 package com.infostore.InfoStore.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -26,7 +25,7 @@ public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUsuario;
 
     @NotBlank
     @Schema(description = "Nome do usuario", example = "João", required = true)

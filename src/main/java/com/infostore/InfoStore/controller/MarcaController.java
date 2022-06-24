@@ -73,7 +73,7 @@ public class MarcaController {
             throws URISyntaxException {
         try {
             Marca novoMarca = marcaService.save(marca);
-            return ResponseEntity.created(new URI("/infostore/marca/" + novoMarca.getId())).body(marca);
+            return ResponseEntity.created(new URI("/infostore/marca/" + novoMarca.getIdMarca())).body(marca);
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -87,7 +87,7 @@ public class MarcaController {
     @PutMapping(value = "/marca/{id}")
     public ResponseEntity<Marca> updateMarca(@Valid @RequestBody Marca marca, @PathVariable long id) {
         try {
-            marca.setId(id);
+            marca.setIdMarca(id);
             marcaService.update(marca);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {

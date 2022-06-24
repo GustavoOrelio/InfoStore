@@ -12,6 +12,6 @@ public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, L
     @Query(value = "select a from Usuario a where a.nome like %?1%")
     Page<Usuario> findByNome(String nome, Pageable page);
 
-    Page<Usuario> findAll(Pageable page);
+    //Page<Usuario> findAll(Pageable page);
 
 }

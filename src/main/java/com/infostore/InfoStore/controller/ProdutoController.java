@@ -83,7 +83,7 @@ public class ProdutoController {
             throws URISyntaxException {
         try {
             Produto novoProduto = produtoService.save(produto);
-            return ResponseEntity.created(new URI("/infostore/produto/" + novoProduto.getId())).body(produto);
+            return ResponseEntity.created(new URI("/infostore/produto/" + novoProduto.getIdProduto())).body(produto);
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -97,7 +97,7 @@ public class ProdutoController {
     @PutMapping(value = "/produto/{id}")
     public ResponseEntity<Produto> updateProduto(@Valid @RequestBody Produto produto, @PathVariable long id) {
         try {
-            produto.setId(id);
+            produto.setIdProduto(id);
             produtoService.update(produto);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {

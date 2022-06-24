@@ -53,9 +53,11 @@ public class UsuarioController {
             Pageable pageable){
         System.out.println(nome);
         if (StringUtils.isEmpty(nome)) {
+            //return ResponseEntity.ok(usuarioService.findAll(pageable));
             return ResponseEntity.ok(new UsuarioDTO().converterListaUsuarioDTO(usuarioService.findAll(pageable)));
         }
         else {
+           //return null;
             return ResponseEntity.ok(new UsuarioDTO().converterListaUsuarioDTO(usuarioService.findAllByNome(nome, pageable)));
         }
     }
@@ -85,7 +87,7 @@ public class UsuarioController {
         try {
             Usuario novoUsuario = usuarioService.save(usuario);
 
-            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getId()))
+            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getIdUsuario()))
                     .body(new UsuarioDTO().converter(usuario));
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
@@ -100,7 +102,7 @@ public class UsuarioController {
     @PutMapping(value = "/usuario/{id}")
     public ResponseEntity<Usuario> updateUsuario(@Valid @RequestBody Usuario usuario, @PathVariable long id) {
         try {
-            usuario.setId(id);
+            usuario.setIdUsuario(id);
             usuarioService.update(usuario);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {

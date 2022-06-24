@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
-
+//timestamp
 @Data
 public class UsuarioDTO {
     private String nome;
@@ -14,11 +14,13 @@ public class UsuarioDTO {
     private String email;
 
     public UsuarioDTO converter(Usuario usuario){
-        BeanUtils.copyProperties(usuario, this);
-        return this;
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        BeanUtils.copyProperties(usuario, usuarioDTO);
+        return usuarioDTO;
     }
 
     public Page<UsuarioDTO> converterListaUsuarioDTO(Page<Usuario> pageUsuario){
+        System.out.println(pageUsuario.getContent().size());
         Page<UsuarioDTO> listaDTO = pageUsuario.map(this::converter);
         return listaDTO;
     }
