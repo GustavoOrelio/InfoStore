@@ -24,21 +24,24 @@ public class Produto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProduto;
-
-    @NotBlank
-    @Schema(description = "Nome do produto", example = "Monitor", required = true)
-    private String nome;
-
-    @Schema(description = "Quantidade de produto", example = "15", required = true)
-    private Integer quantidade;
+    private Long id;
 
     @Column(length = 4000)
     private String descricao;
 
+    @Schema(description = "Quantidade de produto", example = "15", required = true)
+    private Integer quantidadeEstoque;
+
+    private double valorProduto;
+
+    private double valorCusto;
+
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "idMarca")
     private Marca marca;
 
+    @ManyToOne
+    @JoinColumn(name = "idCategoria")
+    private Categoria categoria;
 
 }

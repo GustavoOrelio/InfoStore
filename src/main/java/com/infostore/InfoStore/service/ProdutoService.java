@@ -1,6 +1,7 @@
 package com.infostore.InfoStore.service;
 
 import com.infostore.InfoStore.domain.Produto;
+import com.infostore.InfoStore.domain.Usuario;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;
@@ -32,15 +33,25 @@ public class ProdutoService {
         return produtoRepository.findAll(pageable);
     }
 
-    public Page<Produto> findAllByNome(String nome, Pageable page) {
-        Page<Produto> produto = produtoRepository.findByNome(nome, page);
+    public Page<Produto> findAllByDescricao(String descricao, Pageable page) {
+        Page<Produto> produto = produtoRepository.findByDescricao(descricao, page);
+        return produto;
+    }
+
+    public Page<Produto> findAllByMarca(String descricao, Pageable page) {
+        Page<Produto> produto = produtoRepository.findByMarca(descricao, page);
+        return produto;
+    }
+
+    public Page<Produto> findAllByMarcaId(Long id, Pageable page) {
+        Page<Produto> produto = produtoRepository.findByMarcaId(id, page);
         return produto;
     }
 
     public Produto save(Produto produto) throws BadResourceException, ResourceAlreadyExistsException {
-        if(!StringUtils.isEmpty(produto.getNome())) {
-            if (produto.getIdProduto() != null && existsById(produto.getIdProduto())) {
-                throw new ResourceAlreadyExistsException("Produto com id: " + produto.getIdProduto() + " já existe");
+        if(!StringUtils.isEmpty(produto.getDescricao())) {
+            if (produto.getId() != null && existsById(produto.getId())) {
+                throw new ResourceAlreadyExistsException("Produto com id: " + produto.getId() + " já existe");
             }
             return produtoRepository.save(produto);
         }
@@ -52,9 +63,9 @@ public class ProdutoService {
     }
 
     public void update(Produto produto) throws BadResourceException, ResourceNotFoundException {
-        if (!StringUtils.isEmpty(produto.getNome())){
-            if (!existsById(produto.getIdProduto())){
-                throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getIdProduto());
+        if (!StringUtils.isEmpty(produto.getDescricao())){
+            if (!existsById(produto.getId())){
+                throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getId());
             }
             produtoRepository.save(produto);
         }

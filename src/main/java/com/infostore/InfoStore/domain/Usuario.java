@@ -25,7 +25,7 @@ public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Long id;
 
     @NotBlank
     @Schema(description = "Nome do usuario", example = "João", required = true)
@@ -35,7 +35,7 @@ public class Usuario implements Serializable {
 
     private String email;
 
-    //Precisa realizar a criptografia
+    @Column(length = 4000)
     private String senha;
 
 }

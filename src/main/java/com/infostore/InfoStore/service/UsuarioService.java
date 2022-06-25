@@ -41,8 +41,8 @@ public class UsuarioService {
     public Usuario save(Usuario usuario) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(usuario.getNome())) {
             usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
-            if (usuario.getIdUsuario() != null && existsById(usuario.getIdUsuario())) {
-                throw new ResourceAlreadyExistsException("Usuario com id: " + usuario.getIdUsuario() + " já existe");
+            if (usuario.getId() != null && existsById(usuario.getId())) {
+                throw new ResourceAlreadyExistsException("Usuario com id: " + usuario.getId() + " já existe");
             }
             return usuarioRepository.save(usuario);
         }
@@ -55,8 +55,8 @@ public class UsuarioService {
 
     public void update(Usuario usuario) throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(usuario.getNome())){
-            if (!existsById(usuario.getIdUsuario())){
-                throw  new ResourceNotFoundException("Usuario não encontrado com o id: " + usuario.getIdUsuario());
+            if (!existsById(usuario.getId())){
+                throw  new ResourceNotFoundException("Usuario não encontrado com o id: " + usuario.getId());
             }
             usuarioRepository.save(usuario);
         }

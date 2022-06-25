@@ -73,7 +73,7 @@ public class CategoriaController {
             throws URISyntaxException {
         try {
             Categoria novoCategoria = categoriaService.save(categoria);
-            return ResponseEntity.created(new URI("/infostore/categoria/" + novoCategoria.getIdCategoria())).body(categoria);
+            return ResponseEntity.created(new URI("/infostore/categoria/" + novoCategoria.getId())).body(categoria);
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -87,7 +87,7 @@ public class CategoriaController {
     @PutMapping(value = "/categoria/{id}")
     public ResponseEntity<Categoria> updateCategoria(@Valid @RequestBody Categoria categoria, @PathVariable long id) {
         try {
-            categoria.setIdCategoria(id);
+            categoria.setId(id);
             categoriaService.update(categoria);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {

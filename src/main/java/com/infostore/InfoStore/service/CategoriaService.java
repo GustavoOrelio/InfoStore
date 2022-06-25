@@ -39,8 +39,8 @@ public class CategoriaService {
 
     public Categoria save(Categoria categoria) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(categoria.getDescricao())) {
-            if (categoria.getIdCategoria() != null && existsById(categoria.getIdCategoria())) {
-                throw new ResourceAlreadyExistsException("Categoria com id: " + categoria.getIdCategoria() + " já existe");
+            if (categoria.getId() != null && existsById(categoria.getId())) {
+                throw new ResourceAlreadyExistsException("Categoria com id: " + categoria.getId() + " já existe");
             }
             return categoriaRepository.save(categoria);
         }
@@ -53,8 +53,8 @@ public class CategoriaService {
 
     public void update(Categoria categoria) throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(categoria.getDescricao())){
-            if (!existsById(categoria.getIdCategoria())){
-                throw  new ResourceNotFoundException("Categoria não encontrada com o id: " + categoria.getIdCategoria());
+            if (!existsById(categoria.getId())){
+                throw  new ResourceNotFoundException("Categoria não encontrada com o id: " + categoria.getId());
             }
             categoriaRepository.save(categoria);
         }

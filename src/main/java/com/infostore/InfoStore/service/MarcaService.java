@@ -39,8 +39,8 @@ public class MarcaService {
 
     public Marca save(Marca marca) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(marca.getDescricao())) {
-            if (marca.getIdMarca() != null && existsById(marca.getIdMarca())) {
-                throw new ResourceAlreadyExistsException("Marca com id: " + marca.getIdMarca() + " já existe");
+            if (marca.getId() != null && existsById(marca.getId())) {
+                throw new ResourceAlreadyExistsException("Marca com id: " + marca.getId() + " já existe");
             }
             return marcaRepository.save(marca);
         }
@@ -53,8 +53,8 @@ public class MarcaService {
 
     public void update(Marca marca) throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(marca.getDescricao())){
-            if (!existsById(marca.getIdMarca())){
-                throw  new ResourceNotFoundException("Marca não encontrado com o id: " + marca.getIdMarca());
+            if (!existsById(marca.getId())){
+                throw  new ResourceNotFoundException("Marca não encontrado com o id: " + marca.getId());
             }
             marcaRepository.save(marca);
         }

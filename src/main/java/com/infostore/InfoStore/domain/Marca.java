@@ -19,7 +19,7 @@ public class Marca implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMarca;
+    private Long id;
 
     private String descricao;
 

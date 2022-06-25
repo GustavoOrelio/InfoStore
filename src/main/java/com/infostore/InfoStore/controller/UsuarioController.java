@@ -87,7 +87,7 @@ public class UsuarioController {
         try {
             Usuario novoUsuario = usuarioService.save(usuario);
 
-            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getIdUsuario()))
+            return ResponseEntity.created(new URI("/infostore/usuario/" + novoUsuario.getId()))
                     .body(new UsuarioDTO().converter(usuario));
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
@@ -102,7 +102,7 @@ public class UsuarioController {
     @PutMapping(value = "/usuario/{id}")
     public ResponseEntity<Usuario> updateUsuario(@Valid @RequestBody Usuario usuario, @PathVariable long id) {
         try {
-            usuario.setIdUsuario(id);
+            usuario.setId(id);
             usuarioService.update(usuario);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {

@@ -46,17 +46,27 @@ public class ProdutoController {
     @Operation(summary = "Busca produto", description = "Busca todos os produtos", tags = {"produto"})
     @GetMapping(value = "/produto", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<Produto>> findAll(
-            @Parameter(description = "Insira o nome do produto", allowEmptyValue = true )
-            @RequestBody(required=false) String nome,
+            @Parameter(description = "Insira a descriçãp do produto", allowEmptyValue = true )
+            @RequestBody(required=false) String descricao,
             @Parameter(description = "Paginação", example = "{\"page\":0,\"size\":10}", allowEmptyValue = true)
             Pageable pageable){
-        System.out.println(nome);
-        if (StringUtils.isEmpty(nome)) {
+        if (StringUtils.isEmpty(descricao)) {
             return ResponseEntity.ok(produtoService.findAll(pageable));
         }
         else {
-            return ResponseEntity.ok(produtoService.findAllByNome(nome, pageable));
+            return ResponseEntity.ok(produtoService.findAllByDescricao(descricao, pageable));
         }
+    }
+
+    @GetMapping(value = "/produto/marca/{descricao}")
+    public ResponseEntity<Page<Produto>> findByMarcaDescricao(String descricao, Pageable pageable ){
+
+        return ResponseEntity.ok(produtoService.findAllByMarca(descricao, pageable));
+    }
+
+    @GetMapping(value = "/produto/marca/{id}")
+    public ResponseEntity<Page<Produto>> findByIdMarca(Long id, Pageable pageable ){
+        return ResponseEntity.ok(produtoService.findAllByMarcaId(id, pageable));
     }
 
     @Operation(summary = "Busca ID", description = "Busca um produto por ID", tags = {"produto"})
@@ -83,7 +93,7 @@ public class ProdutoController {
             throws URISyntaxException {
         try {
             Produto novoProduto = produtoService.save(produto);
-            return ResponseEntity.created(new URI("/infostore/produto/" + novoProduto.getIdProduto())).body(produto);
+            return ResponseEntity.created(new URI("/infostore/produto/" + novoProduto.getId())).body(produto);
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -97,7 +107,7 @@ public class ProdutoController {
     @PutMapping(value = "/produto/{id}")
     public ResponseEntity<Produto> updateProduto(@Valid @RequestBody Produto produto, @PathVariable long id) {
         try {
-            produto.setIdProduto(id);
+            produto.setId(id);
             produtoService.update(produto);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
