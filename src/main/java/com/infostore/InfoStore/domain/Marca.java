@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.security.Timestamp;
 
 @Entity
 @Table(name = "marca")
@@ -20,7 +23,10 @@ public class Marca implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String descricao;
+    @CreationTimestamp
+    private Timestamp dataCadastro;
+    @UpdateTimestamp
+    private Timestamp dataModificacao;
 
 }
