@@ -1,6 +1,7 @@
 package com.infostore.InfoStore.domain;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 
 @Entity
@@ -37,5 +40,11 @@ public class Usuario implements Serializable {
 
     @Column(length = 4000)
     private String senha;
+
+    @CreationTimestamp
+    private Timestamp dataCadastro;
+
+    @UpdateTimestamp
+    private Timestamp dataModificacao;
 
 }
