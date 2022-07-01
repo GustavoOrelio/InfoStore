@@ -31,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/infostore")
 @Tag(name="permissaoUsuario", description="Api De Permissão do Usuário")
 public class PermissaoUsuarioController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
