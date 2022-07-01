@@ -9,7 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "marca")
@@ -24,8 +24,10 @@ public class Marca implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
+
     @CreationTimestamp
-    private Timestamp dataCadastro;
+    private java.sql.Timestamp dataCadastro;
+
     @UpdateTimestamp
     private Timestamp dataModificacao;
 
