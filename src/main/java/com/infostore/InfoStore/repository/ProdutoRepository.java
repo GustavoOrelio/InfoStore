@@ -19,6 +19,9 @@ public interface ProdutoRepository extends PagingAndSortingRepository<Produto, L
     @Query(value = "select a from Produto a where a.marca.id = ?1")
     Page<Produto> findByMarcaId(Long id, Pageable page);
 
+    @Query(value = "select a from Produto a where a.id = ?1")
+    Produto buscarPorId(Long id);
+
 
     Page<Produto> findAll(Pageable page);
 

@@ -1,10 +1,12 @@
 package com.infostore.InfoStore.service;
 
 import com.infostore.InfoStore.domain.Produto;
+import com.infostore.InfoStore.domain.ProdutoPreco;
 import com.infostore.InfoStore.domain.Usuario;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;
+import com.infostore.InfoStore.repository.ProdutoPrecoRepository;
 import com.infostore.InfoStore.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ import org.springframework.util.StringUtils;
 public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private ProdutoPrecoRepository produtoPrecoRepository;
 
     private boolean existsById(Long id){
         return produtoRepository.existsById(id);
@@ -53,7 +58,15 @@ public class ProdutoService {
             if (produto.getId() != null && existsById(produto.getId())) {
                 throw new ResourceAlreadyExistsException("Produto com id: " + produto.getId() + " já existe");
             }
-            return produtoRepository.save(produto);
+            Produto produtoNovo = produtoRepository.save(produto);
+            
+            ProdutoPreco produtoPreco = new ProdutoPreco();
+            produtoPreco.setProduto(produtoNovo);
+            produtoPreco.setValorCusto(produtoNovo.getValorCusto());
+            produtoPreco.setValorVenda(produtoNovo.getValorVenda());
+            produtoPrecoRepository.save(produtoPreco);
+
+            return produtoNovo;
         }
         else {
             BadResourceException exc = new BadResourceException("Erro ao salvar o produto");
@@ -67,7 +80,16 @@ public class ProdutoService {
             if (!existsById(produto.getId())){
                 throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getId());
             }
-            produtoRepository.save(produto);
+            if(produto.getValorVenda() != produtoRepository.buscarPorId(produto.getId()).getValorVenda() || produto.getValorCusto() != produtoRepository.buscarPorId(produto.getId()).getValorCusto()) {
+
+                ProdutoPreco produtoPreco = new ProdutoPreco();
+                produtoPreco.setProduto(produto);
+                produtoPreco.setValorCusto(produto.getValorCusto());
+                produtoPreco.setValorVenda(produto.getValorVenda());
+                produtoPrecoRepository.save(produtoPreco);
+            }
+
+
         }
         else {
             BadResourceException exc = new BadResourceException("Falha ao salvar o produto");
