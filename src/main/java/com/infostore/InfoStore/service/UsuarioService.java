@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -50,6 +51,7 @@ public class UsuarioService {
 
     public Usuario save(Usuario usuario) throws BadResourceException, ResourceAlreadyExistsException {
         if(!StringUtils.isEmpty(usuario.getNome())) {
+            usuario.setImagemPerfil(Base64.getEncoder().encode(usuario.getImagemPerfil()));;
             usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
             if (usuario.getId() != null && existsById(usuario.getId())) {
                 throw new ResourceAlreadyExistsException("Usuario com id: " + usuario.getId() + " já existe");
@@ -73,6 +75,8 @@ public class UsuarioService {
 
     public void update(Usuario usuario) throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(usuario.getNome())){
+            usuario.setImagemPerfil(Base64.getEncoder().encode(usuario.getImagemPerfil()));;
+            usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
             if (!existsById(usuario.getId())){
                 throw  new ResourceNotFoundException("Usuario não encontrado com o id: " + usuario.getId());
             }

@@ -34,6 +34,9 @@ public class Usuario implements Serializable {
     @Schema(description = "Nome do usuario", example = "João", required = true)
     private String nome;
 
+    @Lob
+    private byte[] imagemPerfil;
+
     private String cpf;
 
     private String email;
