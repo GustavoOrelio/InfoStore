@@ -1,9 +1,9 @@
 package com.infostore.InfoStore.domain;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.Cache;
@@ -11,6 +11,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "produto")
@@ -32,9 +34,9 @@ public class Produto implements Serializable {
     @Schema(description = "Quantidade de produto", example = "15", required = true)
     private Integer quantidadeEstoque;
 
-    private double valorProduto;
+    private Double valorVenda;
 
-    private double valorCusto;
+    private Double valorCusto;
 
     @ManyToOne
     @JoinColumn(name = "idMarca")
@@ -43,5 +45,11 @@ public class Produto implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
+
+    @CreationTimestamp
+    private Timestamp dataCadastro;
+
+    @UpdateTimestamp
+    private Timestamp dataModificacao;
 
 }
