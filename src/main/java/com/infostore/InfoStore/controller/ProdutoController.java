@@ -24,14 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -46,26 +39,25 @@ public class ProdutoController {
     @Operation(summary = "Busca produto", description = "Busca todos os produtos", tags = {"produto"})
     @GetMapping(value = "/produto", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<Produto>> findAll(
-            @Parameter(description = "Insira a descriçãp do produto", allowEmptyValue = true )
-            @RequestBody(required=false) String descricao,
+            @Parameter(description = "Insira a descriçãp do produto", allowEmptyValue = true)
+            @RequestBody(required = false) String descricao,
             @Parameter(description = "Paginação", example = "{\"page\":0,\"size\":10}", allowEmptyValue = true)
-            Pageable pageable){
+            Pageable pageable) {
         if (StringUtils.isEmpty(descricao)) {
             return ResponseEntity.ok(produtoService.findAll(pageable));
-        }
-        else {
+        } else {
             return ResponseEntity.ok(produtoService.findAllByDescricao(descricao, pageable));
         }
     }
 
     @GetMapping(value = "/produto/marca/{descricao}")
-    public ResponseEntity<Page<Produto>> findByMarcaDescricao(String descricao, Pageable pageable ){
+    public ResponseEntity<Page<Produto>> findByMarcaDescricao(String descricao, Pageable pageable) {
 
         return ResponseEntity.ok(produtoService.findAllByMarca(descricao, pageable));
     }
 
     @GetMapping(value = "/produto/marca/{id}")
-    public ResponseEntity<Page<Produto>> findByIdMarca(Long id, Pageable pageable ){
+    public ResponseEntity<Page<Produto>> findByIdMarca(Long id, Pageable pageable) {
         return ResponseEntity.ok(produtoService.findAllByMarcaId(id, pageable));
     }
 
@@ -120,15 +112,21 @@ public class ProdutoController {
     }
 
     @Operation(summary = "Deletar por ID", description = "Delete um produto pelo ID", tags = {"produto"})
-    @DeleteMapping(path="/produto/{id}")
-    public ResponseEntity<Void> deleteProdutoById(@PathVariable long id){
+    @DeleteMapping(path = "/produto/{id}")
+    public ResponseEntity<Void> deleteProdutoById(@PathVariable long id) {
         try {
             produtoService.deleteById(id);
             return ResponseEntity.ok().build();
-        } catch(ResourceNotFoundException ex) {
+        } catch (ResourceNotFoundException ex) {
             logger.error(ex.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @GetMapping(path = "/atualizarValorCategoria")
+    public ResponseEntity<Void> atualizarValorProdutoCategoria(@RequestParam Double percentual, @RequestParam Long idCategoria, @RequestParam String tipoOperacao) throws BadResourceException, ResourceNotFoundException {
+        produtoService.atualizarValorProduto(idCategoria, percentual, tipoOperacao);
+        return ResponseEntity.ok().build();
     }
 
 }

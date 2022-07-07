@@ -25,10 +25,10 @@ public class Marca implements Serializable {
     private Long id;
     private String descricao;
 
-    @CreationTimestamp
-    private java.sql.Timestamp dataCadastro;
-
-    @UpdateTimestamp
-    private Timestamp dataModificacao;
+//    @CreationTimestamp
+//    private java.sql.Timestamp dataCadastro;
+//
+//    @UpdateTimestamp
+//    private Timestamp dataModificacao;
 
 }

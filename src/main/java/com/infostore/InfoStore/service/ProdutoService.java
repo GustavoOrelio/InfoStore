@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 public class ProdutoService {
     @Autowired
@@ -22,16 +24,15 @@ public class ProdutoService {
     @Autowired
     private ProdutoPrecoRepository produtoPrecoRepository;
 
-    private boolean existsById(Long id){
+    private boolean existsById(Long id) {
         return produtoRepository.existsById(id);
     }
 
     public Produto findById(Long id) throws ResourceNotFoundException {
         Produto produto = produtoRepository.findById(id).orElse(null);
-        if(produto == null) {
+        if (produto == null) {
             throw new ResourceNotFoundException("Produto não encontrado com o id: " + id);
-        }
-        else return produto;
+        } else return produto;
     }
 
     public Page<Produto> findAll(Pageable pageable) {
@@ -54,12 +55,12 @@ public class ProdutoService {
     }
 
     public Produto save(Produto produto) throws BadResourceException, ResourceAlreadyExistsException {
-        if(!StringUtils.isEmpty(produto.getDescricao())) {
+        if (!StringUtils.isEmpty(produto.getDescricao())) {
             if (produto.getId() != null && existsById(produto.getId())) {
                 throw new ResourceAlreadyExistsException("Produto com id: " + produto.getId() + " já existe");
             }
             Produto produtoNovo = produtoRepository.save(produto);
-            
+
             ProdutoPreco produtoPreco = new ProdutoPreco();
             produtoPreco.setProduto(produtoNovo);
             produtoPreco.setValorCusto(produtoNovo.getValorCusto());
@@ -67,8 +68,7 @@ public class ProdutoService {
             produtoPrecoRepository.save(produtoPreco);
 
             return produtoNovo;
-        }
-        else {
+        } else {
             BadResourceException exc = new BadResourceException("Erro ao salvar o produto");
             exc.addErrorMessage("Produto está vazio ou é nulo");
             throw exc;
@@ -76,11 +76,11 @@ public class ProdutoService {
     }
 
     public void update(Produto produto) throws BadResourceException, ResourceNotFoundException {
-        if (!StringUtils.isEmpty(produto.getDescricao())){
-            if (!existsById(produto.getId())){
-                throw  new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getId());
+        if (!StringUtils.isEmpty(produto.getDescricao())) {
+            if (!existsById(produto.getId())) {
+                throw new ResourceNotFoundException("Produto não encontrado com o id: " + produto.getId());
             }
-            if(produto.getValorVenda() != produtoRepository.buscarPorId(produto.getId()).getValorVenda() || produto.getValorCusto() != produtoRepository.buscarPorId(produto.getId()).getValorCusto()) {
+            if (produto.getValorVenda() != produtoRepository.buscarPorId(produto.getId()).getValorVenda() || produto.getValorCusto() != produtoRepository.buscarPorId(produto.getId()).getValorCusto()) {
 
                 ProdutoPreco produtoPreco = new ProdutoPreco();
                 produtoPreco.setProduto(produto);
@@ -90,19 +90,30 @@ public class ProdutoService {
             }
 
 
-        }
-        else {
+        } else {
             BadResourceException exc = new BadResourceException("Falha ao salvar o produto");
             exc.addErrorMessage("Produto está nulo ou em branco");
             throw exc;
         }
     }
 
-    public void deleteById(Long id) throws  ResourceNotFoundException {
-        if (!existsById(id)) {
-            throw  new ResourceNotFoundException("Produto não encontrado com o id: " + id);
+    public void atualizarValorProduto(Long idCategoria, Double percentual, String tipoOperacao) throws BadResourceException, ResourceNotFoundException {
+        List<Produto> produtos = produtoRepository.buscarProdutosCategoria(idCategoria);
+        for (Produto produto : produtos) {
+            if (tipoOperacao.equals("+")) {
+                produto.setValorVenda(produto.getValorVenda() * (1 + (percentual / 100)));
+            } else {
+                produto.setValorVenda(produto.getValorVenda() * (1 - (percentual / 100)));
+            }
+            update(produto);
         }
-        else{
+
+    }
+
+    public void deleteById(Long id) throws ResourceNotFoundException {
+        if (!existsById(id)) {
+            throw new ResourceNotFoundException("Produto não encontrado com o id: " + id);
+        } else {
             produtoRepository.deleteById(id);
         }
     }
@@ -110,4 +121,6 @@ public class ProdutoService {
     public Long count() {
         return produtoRepository.count();
     }
+
+
 }

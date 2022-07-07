@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 public interface ProdutoRepository extends PagingAndSortingRepository<Produto, Long>, JpaSpecificationExecutor<Produto> {
 
     @Query(value = "select a from Produto a where a.descricao like %?1%")
@@ -21,6 +23,9 @@ public interface ProdutoRepository extends PagingAndSortingRepository<Produto, L
 
     @Query(value = "select a from Produto a where a.id = ?1")
     Produto buscarPorId(Long id);
+
+    @Query(value = "select p from Produto p where p.categoria.id = ?1")
+    List<Produto> buscarProdutosCategoria(Long idCategoria);
 
 
     Page<Produto> findAll(Pageable page);
