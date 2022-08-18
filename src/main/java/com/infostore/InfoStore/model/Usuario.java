@@ -1,9 +1,10 @@
-package com.infostore.InfoStore.domain;
+package com.infostore.InfoStore.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.Cache;
@@ -14,13 +15,14 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 @Entity
-@Table(name = "produto")
+@Table(name = "usuario")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 
-public class Produto implements Serializable {
+public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,23 +30,19 @@ public class Produto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Schema(description = "Nome do usuario", example = "João", required = true)
+    private String nome;
+
+    @Lob
+    private byte[] imagemPerfil;
+
+    private String cpf;
+
+    private String email;
+
     @Column(length = 4000)
-    private String descricao;
-
-    @Schema(description = "Quantidade de produto", example = "15", required = true)
-    private Integer quantidadeEstoque;
-
-    private Double valorVenda;
-
-    private Double valorCusto;
-
-    @ManyToOne
-    @JoinColumn(name = "idMarca")
-    private Marca marca;
-
-    @ManyToOne
-    @JoinColumn(name = "idCategoria")
-    private Categoria categoria;
+    private String senha;
 
     @CreationTimestamp
     private Timestamp dataCadastro;

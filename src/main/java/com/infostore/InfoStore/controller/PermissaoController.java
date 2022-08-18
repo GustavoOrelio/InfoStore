@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import javax.validation.Valid;
 
-import com.infostore.InfoStore.domain.Permissao;
+import com.infostore.InfoStore.model.Permissao;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;

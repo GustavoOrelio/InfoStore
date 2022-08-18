@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.controller;
 
-import com.infostore.InfoStore.domain.Marca;
+import com.infostore.InfoStore.model.Marca;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;

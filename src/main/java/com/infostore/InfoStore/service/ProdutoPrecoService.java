@@ -1,7 +1,7 @@
 package com.infostore.InfoStore.service;
 
 
-import com.infostore.InfoStore.domain.ProdutoPreco;
+import com.infostore.InfoStore.model.ProdutoPreco;
 import com.infostore.InfoStore.repository.ProdutoPrecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

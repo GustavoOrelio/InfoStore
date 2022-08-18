@@ -1,8 +1,8 @@
 package com.infostore.InfoStore.service;
 
-import com.infostore.InfoStore.domain.Permissao;
-import com.infostore.InfoStore.domain.PermissaoUsuario;
-import com.infostore.InfoStore.domain.Usuario;
+import com.infostore.InfoStore.model.Permissao;
+import com.infostore.InfoStore.model.PermissaoUsuario;
+import com.infostore.InfoStore.model.Usuario;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;

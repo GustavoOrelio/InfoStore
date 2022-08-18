@@ -1,11 +1,10 @@
 package com.infostore.InfoStore.dto;
 
-import com.infostore.InfoStore.domain.Usuario;
+import com.infostore.InfoStore.model.Usuario;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
-import java.util.Date;
 //timestamp
 @Data
 public class UsuarioDTO {

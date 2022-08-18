@@ -1,4 +1,4 @@
-package com.infostore.InfoStore.domain;
+package com.infostore.InfoStore.model;
 
 import java.sql.Timestamp;
 

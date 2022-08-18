@@ -1,8 +1,7 @@
 package com.infostore.InfoStore.service;
 
-import com.infostore.InfoStore.domain.Produto;
-import com.infostore.InfoStore.domain.ProdutoPreco;
-import com.infostore.InfoStore.domain.Usuario;
+import com.infostore.InfoStore.model.Produto;
+import com.infostore.InfoStore.model.ProdutoPreco;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;

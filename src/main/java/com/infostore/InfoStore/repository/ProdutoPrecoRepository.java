@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.repository;
 
-import com.infostore.InfoStore.domain.ProdutoPreco;
+import com.infostore.InfoStore.model.ProdutoPreco;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

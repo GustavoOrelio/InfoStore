@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.service;
 
-import com.infostore.InfoStore.domain.Endereco;
+import com.infostore.InfoStore.model.Endereco;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

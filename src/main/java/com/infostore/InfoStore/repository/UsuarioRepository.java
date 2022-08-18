@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.repository;
 
-import com.infostore.InfoStore.domain.Usuario;
+import com.infostore.InfoStore.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.controller;
 
-import com.infostore.InfoStore.domain.Endereco;
+import com.infostore.InfoStore.model.Endereco;
 import com.infostore.InfoStore.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
