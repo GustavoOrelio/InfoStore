@@ -1,6 +1,6 @@
 package com.infostore.InfoStore.service;
 
-import com.infostore.InfoStore.model.PermissaoUsuario;
+import com.infostore.InfoStore.model.PermissaoPessoa;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;
@@ -22,8 +22,8 @@ public class PermissaoUsuarioService {
 		return permissaoUsuarioRepository.existsById(id);
 	}
 	
-	public PermissaoUsuario findById(Long id) throws ResourceNotFoundException {
-		PermissaoUsuario permissaoUsuario = permissaoUsuarioRepository.findById(id).orElse(null);
+	public PermissaoPessoa findById(Long id) throws ResourceNotFoundException {
+		PermissaoPessoa permissaoUsuario = permissaoUsuarioRepository.findById(id).orElse(null);
 		if(permissaoUsuario == null) {
 			throw new ResourceNotFoundException("Produto não foi encontrado com o id: "+id);
 		}else {
@@ -31,11 +31,11 @@ public class PermissaoUsuarioService {
 		}
 	}
 	
-	public Page<PermissaoUsuario> findAll(Pageable pageable){
+	public Page<PermissaoPessoa> findAll(Pageable pageable){
 		return permissaoUsuarioRepository.findAll(pageable);
 	}
 	
-	public PermissaoUsuario save(PermissaoUsuario permissaoUsuario) throws BadResourceException, ResourceAlreadyExistsException {
+	public PermissaoPessoa save(PermissaoPessoa permissaoUsuario) throws BadResourceException, ResourceAlreadyExistsException {
 		if(permissaoUsuario.getId() != null) {
 			if(existsbyId(permissaoUsuario.getId())) {
 				throw new ResourceAlreadyExistsException("Permissao Usuario com o id: "+permissaoUsuario.getId()+"\n já existe");
@@ -48,7 +48,7 @@ public class PermissaoUsuarioService {
 		}
 	}
 	
-	public void update(PermissaoUsuario permissaoUsuario) throws BadResourceException, ResourceNotFoundException{
+	public void update(PermissaoPessoa permissaoUsuario) throws BadResourceException, ResourceNotFoundException{
 		if(permissaoUsuario.getId() != null) {
 			if(!existsbyId(permissaoUsuario.getId())) {
 				throw new ResourceNotFoundException("Produto não encontrado com o id: "+permissaoUsuario.getId());

@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import javax.validation.Valid;
 
-import com.infostore.InfoStore.model.PermissaoUsuario;
+import com.infostore.InfoStore.model.PermissaoPessoa;
 import com.infostore.InfoStore.exception.BadResourceException;
 import com.infostore.InfoStore.exception.ResourceAlreadyExistsException;
 import com.infostore.InfoStore.exception.ResourceNotFoundException;
@@ -40,14 +40,14 @@ public class PermissaoUsuarioController {
 	private PermissaoUsuarioService permissaoUsuarioService;
 
 	@GetMapping(value="/permissaoUsuario")
-	public ResponseEntity<Page<PermissaoUsuario>> findAll(Pageable pageable){
+	public ResponseEntity<Page<PermissaoPessoa>> findAll(Pageable pageable){
 		return ResponseEntity.ok(permissaoUsuarioService.findAll(pageable));
 	}
 
 	@PostMapping(value="/permissaoUsuario")
-	public ResponseEntity<PermissaoUsuario> addProduto(@RequestBody PermissaoUsuario permissaoUsuario) throws URISyntaxException{
+	public ResponseEntity<PermissaoPessoa> addProduto(@RequestBody PermissaoPessoa permissaoUsuario) throws URISyntaxException{
 		try {
-			PermissaoUsuario p = permissaoUsuarioService.save(permissaoUsuario);
+			PermissaoPessoa p = permissaoUsuarioService.save(permissaoUsuario);
 			return ResponseEntity.created(new URI("/api/produto/"+p.getId())).body(permissaoUsuario);
 		}catch(ResourceAlreadyExistsException ex) {
 			logger.error(ex.getMessage());
@@ -59,7 +59,7 @@ public class PermissaoUsuarioController {
 	}
 
 	@PutMapping(value="/permissaoUsuario/{id}")
-	public ResponseEntity<PermissaoUsuario> updateProduto(@Valid @RequestBody PermissaoUsuario permissaoUsuario, @PathVariable long id) throws BadResourceException{
+	public ResponseEntity<PermissaoPessoa> updateProduto(@Valid @RequestBody PermissaoPessoa permissaoUsuario, @PathVariable long id) throws BadResourceException{
 		try {
 			permissaoUsuario.setId(id);
 			permissaoUsuarioService.update(permissaoUsuario);
@@ -74,7 +74,7 @@ public class PermissaoUsuarioController {
 	}
 
 	@DeleteMapping(path="/permissaoUsuario/{id}")
-	public ResponseEntity<PermissaoUsuario> deleteProdutoById(@PathVariable long id){
+	public ResponseEntity<PermissaoPessoa> deleteProdutoById(@PathVariable long id){
 		try {
 			permissaoUsuarioService.deleteById(id);
 			return ResponseEntity.ok().build();
