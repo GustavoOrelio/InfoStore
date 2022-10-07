@@ -11,13 +11,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "marca")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 public class Marca {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String nome;

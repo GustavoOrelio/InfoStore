@@ -7,18 +7,16 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "categoria")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 public class Categoria {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String nome;

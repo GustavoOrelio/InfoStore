@@ -1,30 +1,21 @@
 package com.infostore.InfoStore.model;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
-
 import javax.persistence.*;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
 
 @Entity
 @Table(name = "produto")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String descricaoCurta;
