@@ -21,7 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 
-public class Produto implements Serializable {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
