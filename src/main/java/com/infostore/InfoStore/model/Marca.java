@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "marca")
@@ -15,17 +16,13 @@ import java.io.Serializable;
 @Setter
 public class Marca implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descricao;
 
-//    @CreationTimestamp
-//    private java.sql.Timestamp dataCadastro;
-//
-//    @UpdateTimestamp
-//    private Timestamp dataModificacao;
-
+    private String nome;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCriacao;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataAtualizacao;
 }

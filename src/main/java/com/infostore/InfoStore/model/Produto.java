@@ -2,6 +2,7 @@ package com.infostore.InfoStore.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -22,34 +23,22 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 public class Produto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 4000)
-    private String descricao;
-
-    @Schema(description = "Quantidade de produto", example = "15", required = true)
-    private Integer quantidadeEstoque;
-
-    private Double valorVenda;
-
+    private String descricaoCurta;
+    private String descricaoDetalhada;
     private Double valorCusto;
-
+    private Double valorVenda;
     @ManyToOne
     @JoinColumn(name = "idMarca")
     private Marca marca;
-
     @ManyToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
-
-    @CreationTimestamp
-    private Timestamp dataCadastro;
-
-    @UpdateTimestamp
-    private Timestamp dataModificacao;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCriacao;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataAtualizacao;
 }

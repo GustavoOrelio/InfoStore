@@ -1,6 +1,5 @@
 package com.infostore.InfoStore.dto;
 
-import com.infostore.InfoStore.model.Usuario;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;

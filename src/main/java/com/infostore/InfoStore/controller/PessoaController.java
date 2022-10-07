@@ -1,7 +1,7 @@
 package com.infostore.InfoStore.controller;
 
-import com.infostore.InfoStore.model.Marca;
-import com.infostore.InfoStore.service.MarcaService;
+import com.infostore.InfoStore.model.Pessoa;
+import com.infostore.InfoStore.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/infostore/marca")
-public class MarcaController {
+@RequestMapping("/infostore/pessoa")
+public class PessoaController {
 
     @Autowired
-    private MarcaService marcaService;
+    private PessoaService pessoaService;
 
     @GetMapping(value = "/")
-    public List<Marca> buscarTodos() {
-        return marcaService.buscarTodos();
+    public List<Pessoa> buscarTodos() {
+        return pessoaService.buscarTodos();
     }
 
     @PostMapping(value = "/")
-    public Marca inserir(@RequestBody Marca marca) {
-        return marcaService.inserir(marca);
+    public Pessoa inserir(@RequestBody Pessoa pessoa) {
+        return pessoaService.inserir(pessoa);
     }
 
     @PutMapping(value = "/")
-    public Marca alterar(@RequestBody Marca marca) {
-        return marcaService.alterar(marca);
+    public Pessoa alterar(@RequestBody Pessoa pessoa) {
+        return pessoaService.alterar(pessoa);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
-        marcaService.excuir(id);
+        pessoaService.excuir(id);
         return ResponseEntity.ok().build();
     }
 }
