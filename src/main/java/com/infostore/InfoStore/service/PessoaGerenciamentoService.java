@@ -1,6 +1,5 @@
 package com.infostore.InfoStore.service;
 
-import com.infostore.InfoStore.dto.PessoaClienteRequestDTO;
 import com.infostore.InfoStore.model.Pessoa;
 import com.infostore.InfoStore.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,25 @@ public class PessoaGerenciamentoService {
         pessoaRepository.saveAndFlush(pessoa);
         emailService.enviarEmailTexto(pessoa.getEmail(), "Código de Recuperação de Senha", "Olá, o seu código para recuperação é o seguinte" + pessoa.getCodigoRecuperacaoSenha());
         return "Código enviado";
+    }
+
+    public String alterarSenha(Pessoa pessoa) {
+        Pessoa pessoaBanco = pessoaRepository.findByEmailAndCodigoRecuperacaoSenha(pessoa.getEmail(), pessoa.getCodigoRecuperacaoSenha());
+        if (pessoaBanco != null) {
+            Date diferenca = new Date(new Date().getTime() - pessoaBanco.getDataEnvioCodigo().getTime());
+
+            if (diferenca.getTime() / 1000 < 900) {
+                //Depois que adicionar o Spring Security é nescessario criptografar a senha!!
+                pessoaBanco.setSenha(pessoa.getSenha());
+                pessoaBanco.setCodigoRecuperacaoSenha(null);
+                pessoaRepository.saveAndFlush(pessoaBanco);
+                return "Senha alterada com sucesso!";
+            } else {
+                return "Tempo expirado, solicite um novo código";
+            }
+        } else {
+            return "Email ou código não encontrado!";
+        }
     }
 
     private String getCodigoRecuperacaoSenha(Long id) {
