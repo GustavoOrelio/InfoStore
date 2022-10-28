@@ -16,21 +16,25 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @GetMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public List<Pessoa> buscarTodos() {
         return pessoaService.buscarTodos();
     }
 
     @PostMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public Pessoa inserir(@RequestBody Pessoa pessoa) {
         return pessoaService.inserir(pessoa);
     }
 
     @PutMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public Pessoa alterar(@RequestBody Pessoa pessoa) {
         return pessoaService.alterar(pessoa);
     }
 
     @DeleteMapping(value = "/{id}")
+    @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
         pessoaService.excuir(id);
         return ResponseEntity.ok().build();

@@ -167,8 +167,11 @@ const App = () => {
         {
             label: 'Cadastros', icon: 'pi pi-fw pi-sitemap',
             items: [
-                { label: 'Estado', icon: 'pi pi-fw pi-home', to: '/estado' },
+                { label: 'Categoria', icon: 'pi pi-fw pi-state-edit', to: '/categoria' },
                 { label: 'Cidade', icon: 'pi pi-fw pi-home', to: '/cidade' },
+                { label: 'Estado', icon: 'pi pi-fw pi-home', to: '/estado' },
+                { label: 'Marca', icon: 'pi pi-fw pi-state-edit', to: '/marca' },
+                { label: 'Pessoa', icon: 'pi pi-fw pi-state-edit', to: '/pessoa' },
             ]
         },
         {
