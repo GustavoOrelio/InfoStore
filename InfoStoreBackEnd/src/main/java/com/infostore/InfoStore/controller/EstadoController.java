@@ -16,21 +16,25 @@ public class EstadoController {
     private EstadoService estadoService;
 
     @GetMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public List<Estado> buscarTodos() {
         return estadoService.buscarTodos();
     }
 
     @PostMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public Estado inserir(@RequestBody Estado estado) {
         return estadoService.inserir(estado);
     }
 
     @PutMapping(value = "/")
+    @CrossOrigin("http://localhost:3000")
     public Estado alterar(@RequestBody Estado estado) {
         return estadoService.alterar(estado);
     }
 
     @DeleteMapping(value = "/{id}")
+    @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
         estadoService.excuir(id);
         return ResponseEntity.ok().build();

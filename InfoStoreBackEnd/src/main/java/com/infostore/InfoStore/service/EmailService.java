@@ -1,5 +1,10 @@
 package com.infostore.InfoStore.service;
 
+import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,10 +15,6 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import freemarker.template.Configuration;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.Map;
-
 @Service
 public class EmailService {
 
@@ -23,26 +24,27 @@ public class EmailService {
     @Autowired
     private Configuration fmConfiguration;
 
-    @Value("{$spring.mail.username}")
+    @Value("${spring.mail.username}")
     private String remetente;
 
     public String enviarEmailTexto(String destinatario, String titulo, String mensagem) {
-
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("oreliogustavo@gmail.com");
+            simpleMailMessage.setFrom(remetente);
             simpleMailMessage.setTo(destinatario);
             simpleMailMessage.setSubject(titulo);
             simpleMailMessage.setText(mensagem);
             javaMailSender.send(simpleMailMessage);
             return "Email enviado com sucesso";
-        } catch (Exception ex) {
+        } catch (Exception e) {
             return "Erro ao enviar email";
         }
+
     }
 
     public void enviarEmailTemplate(String destinatario, String titulo, Map<String, Object> propriedades) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
@@ -51,20 +53,21 @@ public class EmailService {
             mimeMessageHelper.setTo(destinatario);
 
             mimeMessageHelper.setText(getConteudoTemplate(propriedades), true);
+
             javaMailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (MessagingException e) {
+        }catch(MessagingException e) {
             e.printStackTrace();
         }
     }
 
     public String getConteudoTemplate(Map<String, Object> model) {
         StringBuffer content = new StringBuffer();
-
         try {
             content.append(FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email-recuperacao-codigo.flth"), model));
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch(Exception e) {
+
         }
         return content.toString();
     }
+
 }

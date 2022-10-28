@@ -1,18 +1,15 @@
 package com.infostore.InfoStore.model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "permissao_pessoa")
