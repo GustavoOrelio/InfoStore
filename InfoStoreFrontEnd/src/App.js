@@ -46,6 +46,9 @@ import './assets/demo/flags/flags.css';
 import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
+import Categoria from "./pages/cadastros/Categoria";
+import Marca from "./pages/cadastros/Marca";
+import Pessoa from "./pages/cadastros/Pessoa";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -331,6 +334,9 @@ const App = () => {
                     <Route path="/crud" component={Crud} />
                     <Route path="/estado" component={Estado} />
                     <Route path="/cidade" component={Cidade} />
+                    <Route path="/categoria" component={Categoria} />
+                    <Route path="/marca" component={Marca} />
+                    <Route path="/pessoa" component={Pessoa} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                 </div>
