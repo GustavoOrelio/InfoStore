@@ -49,6 +49,7 @@ import './App.scss';
 import Categoria from "./pages/cadastros/Categoria";
 import Marca from "./pages/cadastros/Marca";
 import Pessoa from "./pages/cadastros/Pessoa";
+import Permissao from "./pages/cadastros/Permissao";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -171,9 +172,10 @@ const App = () => {
             label: 'Cadastros', icon: 'pi pi-fw pi-sitemap',
             items: [
                 { label: 'Categoria', icon: 'pi pi-fw pi-state-edit', to: '/categoria' },
-                { label: 'Cidade', icon: 'pi pi-fw pi-home', to: '/cidade' },
-                { label: 'Estado', icon: 'pi pi-fw pi-home', to: '/estado' },
+                { label: 'Cidade', icon: 'pi pi-fw pi-state-edit', to: '/cidade' },
+                { label: 'Estado', icon: 'pi pi-fw pi-state-edit', to: '/estado' },
                 { label: 'Marca', icon: 'pi pi-fw pi-state-edit', to: '/marca' },
+                { label: 'Permissão', icon: 'pi pi-fw pi-state-edit', to: '/permissao' },
                 { label: 'Pessoa', icon: 'pi pi-fw pi-state-edit', to: '/pessoa' },
             ]
         },
@@ -337,6 +339,7 @@ const App = () => {
                     <Route path="/categoria" component={Categoria} />
                     <Route path="/marca" component={Marca} />
                     <Route path="/pessoa" component={Pessoa} />
+                    <Route path="/permissao" component={Permissao} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                 </div>
