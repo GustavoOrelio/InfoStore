@@ -1,20 +1,18 @@
 package com.infostore.InfoStore.model;
 
-import java.util.Date;
-import javax.persistence.*;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "permissao")
-@Getter
-@Setter
+@Data
 public class Permissao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String nome;
     @Temporal(TemporalType.TIMESTAMP)

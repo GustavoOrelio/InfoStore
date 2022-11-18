@@ -1,36 +1,38 @@
 package com.infostore.InfoStore.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
 @Entity
 @Table(name = "permissao_pessoa")
-@Getter
-@Setter
-public class PermissaoPessoa {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+@Data
+public class PermissaoPessoa implements GrantedAuthority {
 
-	@ManyToOne
-	@JoinColumn(name="idPermissao")
-	@JsonIgnore
-	private Permissao permissao;
-	@ManyToOne
-	@JoinColumn(name="idPessoa")
-	private Pessoa pessoa;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dataCriacao;
-	@Temporal(TemporalType.TIMESTAMP)
-	private  Date dataAtualizacao;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "idPessoa")
+    @JsonIgnore
+    private Pessoa pessoa;
+
+    @ManyToOne
+    @JoinColumn(name = "idPermissao")
+    private Permissao permissao;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCriacao;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataAtualizacao;
+
+    @Override
+    public String getAuthority() {
+        return permissao.getNome();
+    }
 }

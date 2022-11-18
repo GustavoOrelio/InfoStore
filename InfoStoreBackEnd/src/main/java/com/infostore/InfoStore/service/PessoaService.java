@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class PessoaService {
+
     @Autowired
     private PessoaRepository pessoaRepository;
 
@@ -17,19 +18,19 @@ public class PessoaService {
         return pessoaRepository.findAll();
     }
 
-    public Pessoa inserir(Pessoa pessoa) {
-        pessoa.setDataCriacao(new Date());
-        Pessoa pessoaNovo = pessoaRepository.saveAndFlush(pessoa);
-        return pessoaNovo;
+    public Pessoa inserir(Pessoa objeto) {
+        objeto.setDataCriacao(new Date());
+        Pessoa objetoNovo = pessoaRepository.saveAndFlush(objeto);
+        return objetoNovo;
     }
 
-    public Pessoa alterar(Pessoa pessoa) {
-        pessoa.setDataCriacao(new Date());
-        return pessoaRepository.saveAndFlush(pessoa);
+    public Pessoa alterar(Pessoa objeto) {
+        objeto.setDataAtualizacao(new Date());
+        return pessoaRepository.saveAndFlush(objeto);
     }
 
-    public void excuir(Long id) {
-        Pessoa pessoa = pessoaRepository.findById(id).get();
-        pessoaRepository.delete(pessoa);
+    public void excluir(Long id) {
+        Pessoa objeto = pessoaRepository.findById(id).get();
+        pessoaRepository.delete(objeto);
     }
 }
