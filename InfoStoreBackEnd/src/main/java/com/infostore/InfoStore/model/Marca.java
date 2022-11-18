@@ -1,18 +1,13 @@
 package com.infostore.InfoStore.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "marca")
-@Getter
-@Setter
+@Data
 public class Marca {
 
     @Id
