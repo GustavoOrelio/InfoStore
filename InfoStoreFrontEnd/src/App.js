@@ -50,6 +50,7 @@ import Categoria from "./pages/cadastros/Categoria";
 import Marca from "./pages/cadastros/Marca";
 import Pessoa from "./pages/cadastros/Pessoa";
 import Permissao from "./pages/cadastros/Permissao";
+import Produto from "./pages/cadastros/Produto";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -177,6 +178,7 @@ const App = () => {
                 { label: 'Marca', icon: 'pi pi-fw pi-state-edit', to: '/marca' },
                 { label: 'Permissão', icon: 'pi pi-fw pi-state-edit', to: '/permissao' },
                 { label: 'Pessoa', icon: 'pi pi-fw pi-state-edit', to: '/pessoa' },
+                { label: 'Produto', icon: 'pi pi-fw pi-state-edit', to: '/produto' },
             ]
         },
         {
@@ -340,6 +342,7 @@ const App = () => {
                     <Route path="/marca" component={Marca} />
                     <Route path="/pessoa" component={Pessoa} />
                     <Route path="/permissao" component={Permissao} />
+                    <Route path="/produto" component={Produto} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                 </div>
