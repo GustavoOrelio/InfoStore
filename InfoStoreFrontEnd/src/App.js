@@ -51,6 +51,7 @@ import Marca from "./pages/cadastros/Marca";
 import Pessoa from "./pages/cadastros/Pessoa";
 import Permissao from "./pages/cadastros/Permissao";
 import Produto from "./pages/cadastros/Produto";
+import ProdutoImagens from "./pages/cadastros/ProdutoImagens";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -343,6 +344,7 @@ const App = () => {
                     <Route path="/pessoa" component={Pessoa} />
                     <Route path="/permissao" component={Permissao} />
                     <Route path="/produto" component={Produto} />
+                    <Route path="/produtoImagens/:id" component={ProdutoImagens} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                 </div>
