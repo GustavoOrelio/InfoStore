@@ -1,17 +1,14 @@
 package com.infostore.InfoStore.model;
 
-import java.util.Date;
-import javax.persistence.*;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
 @Table(name = "produto")
-@Getter
-@Setter
-
+@Data
 public class Produto {
 
     @Id
