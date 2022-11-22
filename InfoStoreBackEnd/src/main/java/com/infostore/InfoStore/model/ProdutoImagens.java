@@ -1,17 +1,13 @@
 package com.infostore.InfoStore.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.*;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "produto_imagens")
-@Getter
-@Setter
-
+@Data
 public class ProdutoImagens {
 
     @Id
@@ -26,4 +22,6 @@ public class ProdutoImagens {
     private Date dataCriacao;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataAtualizacao;
+    @Transient
+    private byte[] arquivo;
 }

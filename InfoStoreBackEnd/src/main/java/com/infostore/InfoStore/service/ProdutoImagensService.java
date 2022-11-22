@@ -4,11 +4,14 @@ import com.infostore.InfoStore.model.Produto;
 import com.infostore.InfoStore.model.ProdutoImagens;
 import com.infostore.InfoStore.repository.ProdutoImagensRepository;
 import com.infostore.InfoStore.repository.ProdutoRepository;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,35 +31,51 @@ public class ProdutoImagensService {
         return produtoImagensRepository.findAll();
     }
 
+    public List<ProdutoImagens> buscarPorProduto(Long idProduto) {
+        List<ProdutoImagens> listaProdutoImagens = produtoImagensRepository.findByProdutoId(idProduto);
+
+        for (ProdutoImagens produtoImagens : listaProdutoImagens) {
+            try (InputStream in = new FileInputStream("c:/imagens/" + produtoImagens.getNome())) {
+                produtoImagens.setArquivo(IOUtils.toByteArray(in));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return listaProdutoImagens;
+    }
+
     public ProdutoImagens inserir(Long idProduto, MultipartFile file) {
         Produto produto = produtoRepository.findById(idProduto).get();
-        ProdutoImagens produtoImagens = new ProdutoImagens();
+        ProdutoImagens objeto = new ProdutoImagens();
 
         try {
-            if (!file.isEmpty()){
+            if (!file.isEmpty()) {
                 byte[] bytes = file.getBytes();
                 String nomeImagem = String.valueOf(produto.getId()) + file.getOriginalFilename();
-                Path caminho = Paths.get("c:/imagens/" + nomeImagem);
+                Path caminho = Paths
+                        .get("c:/imagens/" + nomeImagem);
                 Files.write(caminho, bytes);
-                produtoImagens.setNome(nomeImagem);
+                objeto.setNome(nomeImagem);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        produtoImagens.setProduto(produto);
-        produtoImagens.setDataCriacao(new Date());
-        produtoImagens = produtoImagensRepository.saveAndFlush(produtoImagens);
-        return produtoImagens;
+        objeto.setProduto(produto);
+        objeto.setDataCriacao(new Date());
+        objeto = produtoImagensRepository.saveAndFlush(objeto);
+        return objeto;
     }
 
-    public ProdutoImagens alterar(ProdutoImagens produtoImagens) {
-        produtoImagens.setDataCriacao(new Date());
-        return produtoImagensRepository.saveAndFlush(produtoImagens);
+    public ProdutoImagens alterar(ProdutoImagens objeto) {
+        objeto.setDataAtualizacao(new Date());
+        return produtoImagensRepository.saveAndFlush(objeto);
     }
 
-    public void excuir(Long id) {
-        ProdutoImagens produtoImagens = produtoImagensRepository.findById(id).get();
-        produtoImagensRepository.delete(produtoImagens);
+    public void excluir(Long id) {
+        ProdutoImagens objeto = produtoImagensRepository.findById(id).get();
+        produtoImagensRepository.delete(objeto);
     }
 }
