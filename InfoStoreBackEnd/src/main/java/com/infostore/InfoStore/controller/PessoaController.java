@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/infostore/pessoa")
-@CrossOrigin
 public class PessoaController {
 
     @Autowired
