@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
-import {useFormik} from 'formik';
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Toast} from 'primereact/toast';
@@ -8,17 +7,14 @@ import {Button} from 'primereact/button';
 import {Toolbar} from 'primereact/toolbar';
 import {Dialog} from 'primereact/dialog';
 import {InputText} from 'primereact/inputtext';
-import {PermissaoService} from "../../service/cadastros/PermissaoService";
+import {PermissaoService} from '../../service/cadastros/PermissaoService';
 
 const Permissao = () => {
-
     let objetoNovo = {
-        nome: '',
+        nome: ''
     };
 
     const [objetos, setObjetos] = useState(null);
-    const [cidades, setCidades] = useState(null);
-    const [permissoes, setPermissoes] = useState(null);
     const [objetoDialog, setObjetoDialog] = useState(false);
     const [objetoDeleteDialog, setObjetoDeleteDialog] = useState(false);
     const [objeto, setObjeto] = useState(objetoNovo);
@@ -27,25 +23,6 @@ const Permissao = () => {
     const toast = useRef(null);
     const dt = useRef(null);
     const objetoService = new PermissaoService();
-
-    const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: objeto,
-        validate: (data) => {
-            let errors = {};
-
-            if (!data.nome) {
-                errors.nome = 'Nome é obrigatório';
-            }
-
-            return errors;
-        },
-        onSubmit: (data) => {
-            setObjeto(data);
-            saveObjeto();
-            formik.resetForm();
-        }
-    });
 
     useEffect(() => {
         if (objetos == null) {
@@ -76,7 +53,7 @@ const Permissao = () => {
         setSubmitted(true);
 
         if (objeto.nome.trim()) {
-            let _objeto = formik.values;
+            let _objeto = {...objeto};
             if (objeto.id) {
                 objetoService.alterar(_objeto).then(data => {
                     toast.current.show({severity: 'success', summary: 'Sucesso', detail: 'Alterado com Sucesso', life: 3000});
@@ -123,16 +100,11 @@ const Permissao = () => {
         setObjeto(_objeto);
     }
 
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-    const getFormErrorMessage = (name) => {
-        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
-
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="Novo Permissao" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew}/>
+                    <Button label="Nova" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew}/>
 
                 </div>
             </React.Fragment>
@@ -157,6 +129,7 @@ const Permissao = () => {
         );
     }
 
+
     const actionBodyTemplate = (rowData) => {
         return (
             <div className="actions">
@@ -180,7 +153,7 @@ const Permissao = () => {
     const objetoDialogFooter = (
         <>
             <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog}/>
-            <Button type="submit" form="formularioPermissao" label="Salvar" icon="pi pi-check" className="p-button-text"/>
+            <Button label="Salvar" icon="pi pi-check" className="p-button-text" onClick={saveObjeto}/>
         </>
     );
 
@@ -209,13 +182,14 @@ const Permissao = () => {
                     </DataTable>
 
                     <Dialog visible={objetoDialog} style={{width: '450px'}} header="Cadastrar/Editar" modal className="p-fluid" footer={objetoDialogFooter} onHide={hideDialog}>
-                        <form id="formularioPermissao" onSubmit={formik.handleSubmit}>
-                            <div className="field">
-                                <label htmlFor="nome">Nome*</label>
-                                <InputText id="nome" value={formik.values.nome} onChange={formik.handleChange} autoFocus className={classNames({'p-invalid': isFormFieldValid('nome')})}/>
-                                {getFormErrorMessage('nome')}
-                            </div>
-                        </form>
+
+                        <div className="field">
+                            <label htmlFor="nome">Nome</label>
+                            <InputText id="nome" value={objeto.nome} onChange={(e) => onInputChange(e, 'nome')} required autoFocus className={classNames({'p-invalid': submitted && !objeto.nome})}/>
+                            {submitted && !objeto.name && <small className="p-invalid">Nome é Obrigatório.</small>}
+                        </div>
+
+
                     </Dialog>
 
                     <Dialog visible={objetoDeleteDialog} style={{width: '450px'}} header="Confirmação" modal footer={deleteObjetoDialogFooter} onHide={hideDeleteObjetoDialog}>
@@ -224,6 +198,8 @@ const Permissao = () => {
                             {objeto && <span>Deseja Excluir?</span>}
                         </div>
                     </Dialog>
+
+
                 </div>
             </div>
         </div>
