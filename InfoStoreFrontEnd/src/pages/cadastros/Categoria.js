@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
-import {useFormik} from 'formik';
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Toast} from 'primereact/toast';
@@ -8,17 +7,15 @@ import {Button} from 'primereact/button';
 import {Toolbar} from 'primereact/toolbar';
 import {Dialog} from 'primereact/dialog';
 import {InputText} from 'primereact/inputtext';
-import {CategoriaService} from "../../service/cadastros/CategoriaService";
+import {CategoriaService} from '../../service/cadastros/CategoriaService';
+import ColunaOpcoes from '../../components/ColunaOpcoes';
 
 const Categoria = () => {
-
     let objetoNovo = {
-        nome: '',
+        nome: ''
     };
 
     const [objetos, setObjetos] = useState(null);
-    const [cidades, setCidades] = useState(null);
-    const [permissoes, setPermissoes] = useState(null);
     const [objetoDialog, setObjetoDialog] = useState(false);
     const [objetoDeleteDialog, setObjetoDeleteDialog] = useState(false);
     const [objeto, setObjeto] = useState(objetoNovo);
@@ -27,25 +24,6 @@ const Categoria = () => {
     const toast = useRef(null);
     const dt = useRef(null);
     const objetoService = new CategoriaService();
-
-    const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: objeto,
-        validate: (data) => {
-            let errors = {};
-
-            if (!data.nome) {
-                errors.nome = 'Nome é obrigatório';
-            }
-
-            return errors;
-        },
-        onSubmit: (data) => {
-            setObjeto(data);
-            saveObjeto();
-            formik.resetForm();
-        }
-    });
 
     useEffect(() => {
         if (objetos == null) {
@@ -76,7 +54,7 @@ const Categoria = () => {
         setSubmitted(true);
 
         if (objeto.nome.trim()) {
-            let _objeto = formik.values;
+            let _objeto = {...objeto};
             if (objeto.id) {
                 objetoService.alterar(_objeto).then(data => {
                     toast.current.show({severity: 'success', summary: 'Sucesso', detail: 'Alterado com Sucesso', life: 3000});
@@ -123,16 +101,11 @@ const Categoria = () => {
         setObjeto(_objeto);
     }
 
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-    const getFormErrorMessage = (name) => {
-        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
-
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="Novo Categoria" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew}/>
+                    <Button label="Nova" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew}/>
 
                 </div>
             </React.Fragment>
@@ -157,15 +130,6 @@ const Categoria = () => {
         );
     }
 
-    const actionBodyTemplate = (rowData) => {
-        return (
-            <div className="actions">
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editObjeto(rowData)}/>
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" onClick={() => confirmDeleteObjeto(rowData)}/>
-            </div>
-        );
-    }
-
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -180,7 +144,7 @@ const Categoria = () => {
     const objetoDialogFooter = (
         <>
             <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog}/>
-            <Button type="submit" form="formularioCategoria" label="Salvar" icon="pi pi-check" className="p-button-text"/>
+            <Button label="Salvar" icon="pi pi-check" className="p-button-text" onClick={saveObjeto}/>
         </>
     );
 
@@ -205,17 +169,20 @@ const Categoria = () => {
                                globalFilter={globalFilter} emptyMessage="Sem objetos cadastrados." header={header} responsiveLayout="scroll">
                         <Column field="id" header="ID" sortable body={idBodyTemplate} headerStyle={{width: '14%', minWidth: '10rem'}}></Column>
                         <Column field="nome" header="Nome" sortable body={nomeBodyTemplate} headerStyle={{width: '14%', minWidth: '10rem'}}></Column>
-                        <Column body={actionBodyTemplate}></Column>
+                        <Column body={rowData => {
+                            return <ColunaOpcoes rowData={rowData} editObjeto={editObjeto} confirmDeleteObjeto={confirmDeleteObjeto}/>
+                        }}></Column>
                     </DataTable>
 
                     <Dialog visible={objetoDialog} style={{width: '450px'}} header="Cadastrar/Editar" modal className="p-fluid" footer={objetoDialogFooter} onHide={hideDialog}>
-                        <form id="formularioCategoria" onSubmit={formik.handleSubmit}>
-                            <div className="field">
-                                <label htmlFor="nome">Nome*</label>
-                                <InputText id="nome" value={formik.values.nome} onChange={formik.handleChange} autoFocus className={classNames({'p-invalid': isFormFieldValid('nome')})}/>
-                                {getFormErrorMessage('nome')}
-                            </div>
-                        </form>
+
+                        <div className="field">
+                            <label htmlFor="nome">Nome</label>
+                            <InputText id="nome" value={objeto.nome} onChange={(e) => onInputChange(e, 'nome')} required autoFocus className={classNames({'p-invalid': submitted && !objeto.nome})}/>
+                            {submitted && !objeto.name && <small className="p-invalid">Nome é Obrigatório.</small>}
+                        </div>
+
+
                     </Dialog>
 
                     <Dialog visible={objetoDeleteDialog} style={{width: '450px'}} header="Confirmação" modal footer={deleteObjetoDialogFooter} onHide={hideDeleteObjetoDialog}>
