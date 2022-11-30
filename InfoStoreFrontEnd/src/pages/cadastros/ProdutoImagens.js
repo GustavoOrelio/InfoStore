@@ -1,50 +1,109 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { DataView } from 'primereact/dataview';
-import { Button } from 'primereact/button';
-import '../../assets/layout/ProdutoImagens.css';
-import { FileUpload } from 'primereact/fileupload';
-import { Dialog } from 'primereact/dialog';
-import { useParams } from 'react-router-dom';
-import { ProdutoService } from '../../service/cadastros/ProdutoService';
-import { ProdutoImagensService } from '../../service/cadastros/ProdutoImagensService';
-import { Toast } from 'primereact/toast';
-import { Image } from 'primereact/image';
+import React, {useEffect, useRef, useState} from 'react';
+import classNames from 'classnames';
+import {DataTable} from 'primereact/datatable';
+import {Column} from 'primereact/column';
+import {Toast} from 'primereact/toast';
+import {Button} from 'primereact/button';
+import {Toolbar} from 'primereact/toolbar';
+import {Dialog} from 'primereact/dialog';
+import {InputText} from 'primereact/inputtext';
+import {ProdutoService} from '../../service/cadastros/ProdutoService';
+import {MarcaService} from '../../service/cadastros/MarcaService';
+import {CategoriaService} from '../../service/cadastros/CategoriaService';
+import {Dropdown} from 'primereact/dropdown';
+import {InputTextarea} from 'primereact/inputtextarea';
+import {InputNumber} from 'primereact/inputnumber';
+import {Link} from 'react-router-dom';
 
 
-const ProdutoImagens = () => {
+const Produto = () => {
     let objetoNovo = {
-        file: null,
-        idProduto: null,
-        nome: null
+        descricaoCurta: '',
+        marca: '',
+        categoria: '',
+        descricaoDetalhada: '',
+        valorCusto: '',
+        valorVenda: ''
     };
-    let parametros = useParams();
+
     const [objetos, setObjetos] = useState(null);
+    const [marcas, setMarcas] = useState(null);
+    const [categorias, setCategorias] = useState(null);
+    const [objetoDialog, setObjetoDialog] = useState(false);
     const [objetoDeleteDialog, setObjetoDeleteDialog] = useState(false);
     const [objeto, setObjeto] = useState(objetoNovo);
-    const [produto, setProduto] = useState({});
+    const [submitted, setSubmitted] = useState(false);
+    const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
-    const produtoService = new ProdutoService();
-    const produtoImagensService = new ProdutoImagensService();
+    const objetoService = new ProdutoService();
+    const marcaService = new MarcaService();
+    const categoriaService = new CategoriaService();
+
+    useEffect(() => {
+
+        marcaService.listarTodos().then(res => {
+            setMarcas(res.data)
+
+        });
+        categoriaService.listarTodos().then(res => {
+            setCategorias(res.data)
+
+        });
+
+    }, []);
 
     useEffect(() => {
         if (objetos == null) {
-            produtoService.buscarId(parametros.id).then(result => {
-                setProduto(result.data);
-                buscarPorProduto(result.data.id);
+            objetoService.listarTodos().then(res => {
+                setObjetos(res.data)
+
             });
         }
-        //setObjetos([{},{}])
     }, [objetos]);
 
-    const buscarPorProduto = (idProduto) => {
-        produtoImagensService.buscarPorProduto(idProduto).then(result => {
-            setObjetos(result.data);
-        })
+    const openNew = () => {
+        setObjeto(objetoNovo);
+        setSubmitted(false);
+        setObjetoDialog(true);
+    }
+
+    const hideDialog = () => {
+        setSubmitted(false);
+        setObjetoDialog(false);
     }
 
     const hideDeleteObjetoDialog = () => {
         setObjetoDeleteDialog(false);
+    }
+
+
+    const saveObjeto = () => {
+        setSubmitted(true);
+        console.log(objeto);
+
+        if (objeto.descricaoCurta.trim()) {
+            let _objeto = {...objeto};
+            if (objeto.id) {
+                objetoService.alterar(_objeto).then(data => {
+                    toast.current.show({severity: 'success', summary: 'Sucesso', detail: 'Alterado com Sucesso', life: 3000});
+                    setObjetos(null);
+                });
+            } else {
+                objetoService.inserir(_objeto).then(data => {
+                    toast.current.show({severity: 'success', summary: 'Sucesso', detail: 'Inserido com Sucesso', life: 3000});
+                    setObjetos(null);
+                });
+
+            }
+            setObjetoDialog(false);
+            setObjeto(objetoNovo);
+        }
+    }
+
+    const editObjeto = (objeto) => {
+        setObjeto({...objeto});
+        setObjetoDialog(true);
     }
 
     const confirmDeleteObjeto = (objeto) => {
@@ -54,72 +113,152 @@ const ProdutoImagens = () => {
 
     const deleteObjeto = () => {
 
-        produtoImagensService.excluir(objeto.id).then(data => {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Removido', life: 3000 });
+        objetoService.excluir(objeto.id).then(data => {
+            toast.current.show({severity: 'success', summary: 'Sucesso', detail: 'Removido', life: 3000});
+
             setObjetos(null);
             setObjetoDeleteDialog(false);
+
         });
     }
 
-    const uploadImagens = (event) => {
-        produtoImagensService.uploadImagens({ file: event.files[0], idProduto: produto.id }).then(data => {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Imagem inserida', life: 3000 });
-            setObjetos(null);
-        });
-        event.options.clear();
+    const onInputChange = (e, name) => {
+        console.log(e.target.value);
+        const val = (e.target && e.target.value) || '';
+        let _objeto = {...objeto};
+        _objeto[`${name}`] = val;
+
+        setObjeto(_objeto);
     }
 
-    const renderGridItem = (data) => {
+    const leftToolbarTemplate = () => {
         return (
-            <div className="col-12 md:col-4">
-                <div className="product-grid-item card">
-                    <div className="product-grid-item-content">
-                        <Image src={'data:image;base64, ' + data.arquivo} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} preview />
-                        <Button icon="pi pi-times" className="p-button-danger" label="Remover" onClick={() => confirmDeleteObjeto(data)}></Button>
-                    </div>
+            <React.Fragment>
+                <div className="my-2">
+                    <Button label="Nova" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew}/>
+
                 </div>
+            </React.Fragment>
+        )
+    }
+
+    const idBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">ID</span>
+                {rowData.id}
+            </>
+        );
+    }
+
+    const descricaoCurtaBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Nome</span>
+                {rowData.descricaoCurta}
+            </>
+        );
+    }
+
+
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <div className="actions">
+                <Link to={{pathname: '/produtoImagens/' + rowData.id}}> <Button icon="pi pi-image" className="p-button-rounded p-button-primary mr-2"/></Link>
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editObjeto(rowData)}/>
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" onClick={() => confirmDeleteObjeto(rowData)}/>
             </div>
         );
     }
 
-    const renderHeader = () => {
-        return (
-            <div className="grid grid-nogutter">
-                <div className="col-6" style={{ textAlign: 'left' }}>
-                    <FileUpload customUpload auto uploadHandler={uploadImagens} chooseLabel="Adicionar Imagem" mode="basic" accept="image/*" maxFileSize={1000000} />
-                </div>
-                <div className="col-6" style={{ textAlign: 'right' }}>
-                    <h4>{produto.descricaoCurta}</h4>
-                </div>
 
-            </div>
-        );
-    }
+    const header = (
+        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 className="m-0">Registros Cadastrados</h5>
+            <span className="block mt-2 md:mt-0 p-input-icon-left">
+                <i className="pi pi-search"/>
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..."/>
+            </span>
+        </div>
+    );
 
-    const deleteObjetoDialogFooter = (
+    const objetoDialogFooter = (
         <>
-            <Button label="Não" icon="pi pi-times" className="p-button-text" onClick={hideDeleteObjetoDialog} />
-            <Button label="Sim" icon="pi pi-check" className="p-button-text" onClick={deleteObjeto} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog}/>
+            <Button label="Salvar" icon="pi pi-check" className="p-button-text" onClick={saveObjeto}/>
         </>
     );
 
-    const header = renderHeader();
+    const deleteObjetoDialogFooter = (
+        <>
+            <Button label="Não" icon="pi pi-times" className="p-button-text" onClick={hideDeleteObjetoDialog}/>
+            <Button label="Sim" icon="pi pi-check" className="p-button-text" onClick={deleteObjeto}/>
+        </>
+    );
 
     return (
-        <div className="dataview-demo">
-            <Toast ref={toast} />
+        <div className="grid crud-demo">
+            <div className="col-12">
+                <div className="card">
+                    <Toast ref={toast}/>
+                    <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
 
-            <div className="card">
-                <DataView value={objetos} layout={'grid'} header={header}
-                          itemTemplate={renderGridItem} />
-            </div>
+                    <DataTable ref={dt} value={objetos}
+                               dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} className="datatable-responsive"
+                               paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                               currentPageReportTemplate="Mostrando {first} de {last}. Total de {totalRecords}"
+                               globalFilter={globalFilter} emptyMessage="Sem objetos cadastrados." header={header} responsiveLayout="scroll">
+                        <Column field="id" header="ID" sortable body={idBodyTemplate} headerStyle={{width: '14%', minWidth: '10rem'}}></Column>
+                        <Column field="descricaoCurta" header="Descrição Curta" sortable body={descricaoCurtaBodyTemplate} headerStyle={{width: '14%', minWidth: '10rem'}}></Column>
+                        <Column body={actionBodyTemplate}></Column>
+                    </DataTable>
 
-            <Dialog visible={objetoDeleteDialog} style={{ width: '450px' }} header="Confirmação" modal footer={deleteObjetoDialogFooter} onHide={hideDeleteObjetoDialog}>
-                <div className="flex align-items-center justify-content-center">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    {objeto && <span>Deseja Excluir?</span>}
+                    <Dialog visible={objetoDialog} style={{width: '450px'}} header="Cadastrar/Editar" modal className="p-fluid" footer={objetoDialogFooter} onHide={hideDialog}>
+
+                        <div className="field">
+                            <label htmlFor="descricaoCurta">Descrição Curta</label>
+                            <InputText id="descricaoCurta" value={objeto.descricaoCurta} onChange={(e) => onInputChange(e, 'descricaoCurta')} required autoFocus className={classNames({'p-invalid': submitted && !objeto.descricaoCurta})}/>
+                            {submitted && !objeto.descricaoCurta && <small className="p-invalid">Descrição Curta é Obrigatória.</small>}
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="descricaoDetalhada">Descrição Detalhada</label>
+                            <InputTextarea id="descricaoDetalhada" value={objeto.descricaoDetalhada} onChange={(e) => onInputChange(e, 'descricaoDetalhada')}/>
+
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="marca">Marca</label>
+                            <Dropdown optionLabel="nome" value={objeto.marca} options={marcas} filter onChange={(e) => onInputChange(e, 'marca')} placeholder="Selecione uma Marca"/>
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="categoria">Categoria</label>
+                            <Dropdown optionLabel="nome" value={objeto.categoria} options={categorias} filter onChange={(e) => onInputChange(e, 'categoria')} placeholder="Selecione uma Categoria"/>
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="valorCusto">Valor de Custo</label>
+                            <InputNumber mode="currency" currency="BRL" locale="pt-BT" id="valorCusto" value={objeto.valorCusto} onValueChange={(e) => onInputChange(e, 'valorCusto')}/>
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="valorVenda">Valor de Venda</label>
+                            <InputNumber mode="currency" currency="BRL" locale="pt-BT" id="valorVenda" value={objeto.valorVenda} onValueChange={(e) => onInputChange(e, 'valorVenda')}/>
+                        </div>
+
+                    </Dialog>
+
+                    <Dialog visible={objetoDeleteDialog} style={{width: '450px'}} header="Confirmação" modal footer={deleteObjetoDialogFooter} onHide={hideDeleteObjetoDialog}>
+                        <div className="flex align-items-center justify-content-center">
+                            <i className="pi pi-exclamation-triangle mr-3" style={{fontSize: '2rem'}}/>
+                            {objeto && <span>Deseja Excluir?</span>}
+                        </div>
+                    </Dialog>
+
+
                 </div>
-            </Dialog>
+            </div>
         </div>
     );
 }
@@ -128,4 +267,4 @@ const comparisonFn = function (prevProps, nextProps) {
     return prevProps.location.pathname === nextProps.location.pathname;
 };
 
-export default React.memo(ProdutoImagens, comparisonFn);
+export default React.memo(Produto, comparisonFn);

@@ -1,8 +1,8 @@
-import { ServiceBase } from './ServiceBase';
+import {ServiceBase} from './ServiceBase';
 
 export class ProdutoService extends ServiceBase {
 
-    constructor(){
+    constructor() {
         super("produto");
     }
 

@@ -1,26 +1,25 @@
-import { ServiceBase } from './ServiceBase';
-import Axios from "axios";
+import {ServiceBase} from './ServiceBase';
 
 export class ProdutoImagensService extends ServiceBase {
 
-    constructor(){
+    constructor() {
         super("produtoImagens");
     }
 
-    uploadImagens(obj){
+    uploadImagens(obj) {
         const formData = new FormData();
         formData.append('idProduto', obj.idProduto);
         formData.append('file', obj.file);
-        const config ={
-            headers :{
-                'content-type':'multipart/form-data'
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
             }
         }
-        return Axios.post(this.url, formData, config);
+        return this.axiosInstance.post(this.url, formData, config);
     }
 
-    buscarPorProduto(idProduto){
-        return Axios.get(this.url+"produto/"+idProduto);
+    buscarPorProduto(idProduto) {
+        return this.axiosInstance.get(this.url + "produto/" + idProduto);
     }
 
 }
