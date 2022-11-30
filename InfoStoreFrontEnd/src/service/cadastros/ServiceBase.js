@@ -1,29 +1,62 @@
-import Axios from "axios";
+import axios from 'axios';
+import {LoginService} from '../util/LoginService';
 
 export class ServiceBase {
 
 
     constructor(urlBase) {
-        this.url = process.env.REACT_APP_URI_API + '/' + urlBase + '/';
+        this.url = urlBase + '/';
+        this.inicializarAxios();
+        this.tratamentoErro401();
+    }
+
+    inicializarAxios() {
+        this.axiosInstance = axios.create({
+            baseURL: process.env.REACT_APP_URL_API,
+        });
+
+        this.axiosInstance.interceptors.request.use((config) => {
+                const token = new LoginService().getToken();
+                const authRequestToken = token ? `Bearer ${token}` : '';
+                config.headers.common['Authorization'] = authRequestToken;
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+    }
+
+    tratamentoErro401() {
+        this.axiosInstance.interceptors.response.use((response) => {
+            return response;
+        }, (erro) => {
+            console.log(erro.response.status);
+            if (erro.response.status == 401) {
+                if (!erro.request.response.includes("pessoa-gerenciamento/login")) {
+                    new LoginService().sair();
+                    window.location.href = "/";
+                }
+            }
+            return Promise.reject(erro);
+        });
     }
 
     listarTodos() {
-        return Axios.get(this.url);
+        return this.axiosInstance.get(this.url);
     }
 
     buscarId(id) {
-        return Axios.get(this.url + id);
+        return this.axiosInstance.get(this.url + id);
     }
 
     inserir(objeto) {
-        return Axios.post(this.url, objeto);
+        return this.axiosInstance.post(this.url, objeto);
     }
 
     alterar(objeto) {
-        return Axios.put(this.url, objeto);
+        return this.axiosInstance.put(this.url, objeto);
     }
 
     excluir(id) {
-        return Axios.delete(this.url + id);
+        return this.axiosInstance.delete(this.url + id);
     }
 }
