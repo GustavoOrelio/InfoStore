@@ -8,35 +8,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/infostore/categoria")
+@CrossOrigin
 public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
 
-    @GetMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
+    @GetMapping("/")
     public List<Categoria> buscarTodos() {
         return categoriaService.buscarTodos();
     }
 
-    @PostMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
-    public Categoria inserir(@RequestBody Categoria categoria) {
-        return categoriaService.inserir(categoria);
+    @PostMapping("/")
+    public Categoria inserir(@RequestBody Categoria objeto) {
+        return categoriaService.inserir(objeto);
     }
 
-    @PutMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
-    public Categoria alterar(@RequestBody Categoria categoria) {
-        return categoriaService.alterar(categoria);
+    @PutMapping("/")
+    public Categoria alterar(@RequestBody Categoria objeto) {
+        return categoriaService.alterar(objeto);
     }
 
-    @DeleteMapping(value = "/{id}")
-    @CrossOrigin("http://localhost:3000")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
-        categoriaService.excuir(id);
+        categoriaService.excluir(id);
         return ResponseEntity.ok().build();
     }
+
 }
