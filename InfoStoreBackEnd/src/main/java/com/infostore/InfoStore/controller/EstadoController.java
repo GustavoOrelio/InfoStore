@@ -10,33 +10,37 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/infostore/estado")
+@CrossOrigin
 public class EstadoController {
 
     @Autowired
     private EstadoService estadoService;
 
-    @GetMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
+    @GetMapping("/")
     public List<Estado> buscarTodos() {
         return estadoService.buscarTodos();
     }
 
-    @PostMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
+    @PostMapping("/")
     public Estado inserir(@RequestBody Estado estado) {
         return estadoService.inserir(estado);
     }
 
-    @PutMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
+    @PutMapping("/")
     public Estado alterar(@RequestBody Estado estado) {
         return estadoService.alterar(estado);
     }
 
-    @DeleteMapping(value = "/{id}")
-    @CrossOrigin("http://localhost:3000")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
-        estadoService.excuir(id);
+        estadoService.excluir(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Estado> buscarPorId(@PathVariable("id") Long id) {
+
+        return ResponseEntity.ok(estadoService.buscarPorId(id));
+    }
+
 }
