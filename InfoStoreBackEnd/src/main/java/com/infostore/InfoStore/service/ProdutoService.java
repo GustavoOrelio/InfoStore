@@ -38,6 +38,4 @@ public class ProdutoService {
         Produto objeto = produtoRepository.findById(id).get();
         produtoRepository.delete(objeto);
     }
-
-
 }
