@@ -1,7 +1,8 @@
-import {ServiceBase} from "./ServiceBase";
+import {ServiceBase} from './ServiceBase';
 
 export class CidadeService extends ServiceBase {
+
     constructor() {
-        super("cidade");
+        super("cidade")
     }
 }
