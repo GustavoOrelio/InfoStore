@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class MarcaService {
+
     @Autowired
     private MarcaRepository marcaRepository;
 
@@ -17,19 +18,20 @@ public class MarcaService {
         return marcaRepository.findAll();
     }
 
-    public Marca inserir(Marca marca) {
-        marca.setDataCriacao(new Date());
-        Marca marcaNovo = marcaRepository.saveAndFlush(marca);
-        return marcaNovo;
+    public Marca inserir(Marca objeto) {
+        objeto.setDataCriacao(new Date());
+        Marca objetoNovo = marcaRepository.saveAndFlush(objeto);
+        return objetoNovo;
     }
 
-    public Marca alterar(Marca marca) {
-        marca.setDataCriacao(new Date());
-        return marcaRepository.saveAndFlush(marca);
+    public Marca alterar(Marca objeto) {
+        objeto.setDataAtualizacao(new Date());
+        return marcaRepository.saveAndFlush(objeto);
     }
 
-    public void excuir(Long id) {
-        Marca marca = marcaRepository.findById(id).get();
-        marcaRepository.delete(marca);
+    public void excluir(Long id) {
+        Marca objeto = marcaRepository.findById(id).get();
+        marcaRepository.delete(objeto);
     }
 }
+

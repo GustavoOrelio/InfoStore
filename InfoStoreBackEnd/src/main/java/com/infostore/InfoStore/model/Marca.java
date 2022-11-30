@@ -1,5 +1,6 @@
 package com.infostore.InfoStore.model;
 
+
 import lombok.Data;
 
 import javax.persistence.*;

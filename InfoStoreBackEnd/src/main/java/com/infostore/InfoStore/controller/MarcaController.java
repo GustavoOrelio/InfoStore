@@ -8,35 +8,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/infostore/marca")
+@CrossOrigin
 public class MarcaController {
 
     @Autowired
     private MarcaService marcaService;
 
-    @GetMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
+    @GetMapping("/")
     public List<Marca> buscarTodos() {
         return marcaService.buscarTodos();
     }
 
-    @PostMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
-    public Marca inserir(@RequestBody Marca marca) {
-        return marcaService.inserir(marca);
+    @PostMapping("/")
+    public Marca inserir(@RequestBody Marca objeto) {
+        return marcaService.inserir(objeto);
     }
 
-    @PutMapping(value = "/")
-    @CrossOrigin("http://localhost:3000")
-    public Marca alterar(@RequestBody Marca marca) {
-        return marcaService.alterar(marca);
+    @PutMapping("/")
+    public Marca alterar(@RequestBody Marca objeto) {
+        return marcaService.alterar(objeto);
     }
 
-    @DeleteMapping(value = "/{id}")
-    @CrossOrigin("http://localhost:3000")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
-        marcaService.excuir(id);
+        marcaService.excluir(id);
         return ResponseEntity.ok().build();
     }
+
 }
