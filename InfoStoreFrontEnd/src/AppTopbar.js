@@ -1,8 +1,11 @@
-import React  from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import classNames from 'classnames';
+import {LoginService} from './service/util/LoginService';
 
 export const AppTopbar = (props) => {
+
+    const loginService = new LoginService();
 
     return (
         <div className="layout-topbar">
@@ -16,29 +19,29 @@ export const AppTopbar = (props) => {
             </button>
 
             <button type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={props.onMobileTopbarMenuClick}>
-                <i className="pi pi-ellipsis-v" />
+                <i className="pi pi-ellipsis-v"/>
             </button>
 
-                <ul className={classNames("layout-topbar-menu lg:flex origin-top", {'layout-topbar-menu-mobile-active': props.mobileTopbarMenuActive })}>
-                    <li>
-                        <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
-                            <i className="pi pi-calendar"/>
-                            <span>Events</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
-                            <i className="pi pi-cog"/>
-                            <span>Settings</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
-                            <i className="pi pi-user"/>
-                            <span>Profile</span>
-                        </button>
-                    </li>
-                </ul>
+            <ul className={classNames("layout-topbar-menu lg:flex origin-top", {'layout-topbar-menu-mobile-active': props.mobileTopbarMenuActive})}>
+                <li>
+                    <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
+                        <i className="pi pi-calendar"/>
+                        <span>Events</span>
+                    </button>
+                </li>
+                <li>
+                    <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
+                        <i className="pi pi-cog"/>
+                        <span>Settings</span>
+                    </button>
+                </li>
+                <li>
+                    <button className="p-link layout-topbar-button" onClick={() => loginService.sair()}>
+                        <i className="pi pi-user"/>
+                        <span>Sair</span>
+                    </button>
+                </li>
+            </ul>
         </div>
     );
 }

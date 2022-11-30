@@ -30,13 +30,20 @@ import BlocksDemo from './components/BlocksDemo';
 import IconsDemo from './components/IconsDemo';
 
 import Crud from './pages/Crud';
-import Estado from './pages/cadastros/Estado';
-import Cidade from './pages/cadastros/Cidade';
 import EmptyPage from './pages/EmptyPage';
 import TimelineDemo from './pages/TimelineDemo';
 
 import PrimeReact from 'primereact/api';
 import {Tooltip} from 'primereact/tooltip';
+
+import Estado from './pages/cadastros/Estado';
+import Cidade from './pages/cadastros/Cidade';
+import Pessoa from './pages/cadastros/Pessoa';
+import Permissao from './pages/cadastros/Permissao';
+import Produto from './pages/cadastros/Produto';
+import Categoria from './pages/cadastros/Categoria';
+import Marca from './pages/cadastros/Marca';
+
 
 import 'primereact/resources/primereact.css';
 import 'primeicons/primeicons.css';
@@ -46,13 +53,10 @@ import './assets/demo/flags/flags.css';
 import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
-import Categoria from "./pages/cadastros/Categoria";
-import Marca from "./pages/cadastros/Marca";
-import Pessoa from "./pages/cadastros/Pessoa";
-import Permissao from "./pages/cadastros/Permissao";
-import Produto from "./pages/cadastros/Produto";
-import ProdutoImagens from "./pages/cadastros/ProdutoImagens";
-import Login from "./pages/Login";
+import ProdutoImagens from './pages/cadastros/ProdutoImagens';
+import Login from './pages/Login';
+import {LoginService} from './service/util/LoginService';
+
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -65,6 +69,7 @@ const App = () => {
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
+    const loginService = new LoginService();
 
     PrimeReact.ripple = true;
 
@@ -170,16 +175,28 @@ const App = () => {
             }]
         },
         {
-            label: 'Cadastros', icon: 'pi pi-fw pi-sitemap',
-            items: [
-                {label: 'Categoria', icon: 'pi pi-fw pi-state-edit', to: '/categoria'},
-                {label: 'Cidade', icon: 'pi pi-fw pi-state-edit', to: '/cidade'},
-                {label: 'Estado', icon: 'pi pi-fw pi-state-edit', to: '/estado'},
-                {label: 'Marca', icon: 'pi pi-fw pi-state-edit', to: '/marca'},
-                {label: 'Permissão', icon: 'pi pi-fw pi-state-edit', to: '/permissao'},
-                {label: 'Pessoa', icon: 'pi pi-fw pi-state-edit', to: '/pessoa'},
-                {label: 'Produto', icon: 'pi pi-fw pi-state-edit', to: '/produto'},
-            ]
+            label: 'Cadastros',
+            items: [{
+                label: 'Estados', icon: 'pi pi-fw pi-home', to: '/estados'
+            },
+                {
+                    label: 'Cidades', icon: 'pi pi-fw pi-home', to: '/cidades'
+                },
+                {
+                    label: 'Marcas', icon: 'pi pi-fw pi-home', to: '/marcas'
+                },
+                {
+                    label: 'Categorias', icon: 'pi pi-fw pi-home', to: '/categorias'
+                },
+                {
+                    label: 'Produtos', icon: 'pi pi-fw pi-home', to: '/produtos'
+                },
+                {
+                    label: 'Permissões', icon: 'pi pi-fw pi-home', to: '/permissoes'
+                },
+                {
+                    label: 'Pessoas', icon: 'pi pi-fw pi-home', to: '/pessoas'
+                }]
         },
         {
             label: 'UI Components', icon: 'pi pi-fw pi-sitemap',
@@ -345,17 +362,18 @@ const App = () => {
                         <Route path="/misc" component={MiscDemo}/>
                         <Route path="/timeline" component={TimelineDemo}/>
                         <Route path="/crud" component={Crud}/>
-                        <Route path="/estado" component={Estado}/>
-                        <Route path="/cidade" component={Cidade}/>
-                        <Route path="/categoria" component={Categoria}/>
-                        <Route path="/marca" component={Marca}/>
-                        <Route path="/pessoa" component={Pessoa}/>
-                        <Route path="/permissao" component={Permissao}/>
-                        <Route path="/produto" component={Produto}/>
-                        <Route path="/produtoImagens/:id" component={ProdutoImagens}/>
-                        <Route path="/login" component={Login}/>
                         <Route path="/empty" component={EmptyPage}/>
                         <Route path="/documentation" component={Documentation}/>
+                        <Route path="/estados" component={Estado}/>
+                        <Route path="/cidades" component={Cidade}/>
+                        <Route path="/marcas" component={Marca}/>
+                        <Route path="/categorias" component={Categoria}/>
+                        <Route path="/produtos" component={Produto}/>
+                        <Route path="/permissoes" component={Permissao}/>
+                        <Route path="/pessoas" component={Pessoa}/>
+                        <Route path="/produtoImagens/:id" component={ProdutoImagens}/>
+                        <Route path="/login" component={Login}/>
+
                     </div>
 
                     <AppFooter layoutColorMode={layoutColorMode}/>
@@ -375,7 +393,7 @@ const App = () => {
     return (
         <div>
             {
-                false ?
+                loginService.autenticado() ?
                     <Pagina/>
                     :
                     <Login/>
