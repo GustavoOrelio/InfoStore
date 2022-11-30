@@ -24,13 +24,13 @@ public class CidadeService {
         return cidadeNovo;
     }
 
-    public Cidade alterar(Cidade cidade) {
-        cidade.setDataCriacao(new Date());
-        return cidadeRepository.saveAndFlush(cidade);
+    public Cidade alterar(Cidade objeto) {
+        objeto.setDataAtualizacao(new Date());
+        return cidadeRepository.saveAndFlush(objeto);
     }
 
-    public void excuir(Long id) {
-        Cidade cidade = cidadeRepository.findById(id).get();
-        cidadeRepository.delete(cidade);
+    public void excluir(Long id) {
+        Cidade objeto = cidadeRepository.findById(id).get();
+        cidadeRepository.delete(objeto);
     }
 }
