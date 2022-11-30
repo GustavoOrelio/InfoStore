@@ -3,17 +3,17 @@ import {Checkbox} from 'primereact/checkbox';
 import {InputText} from 'primereact/inputtext';
 import {Toast} from 'primereact/toast';
 import React, {useRef, useState} from 'react';
-//import {LoginService} from '../service/util/LoginService';
+import {LoginService} from '../service/util/LoginService';
 
 const Login = () => {
 
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    //const loginService = new LoginService();
+    const loginService = new LoginService();
     const toast = useRef(null);
 
     const fazerLogin = () => {
-      //  loginService.login(email, senha, mostrarMensagemErro);
+        loginService.login(email, senha, mostrarMensagemErro);
     }
 
     const mostrarMensagemErro = (erro) => {
